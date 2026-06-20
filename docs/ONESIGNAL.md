@@ -10,19 +10,33 @@
 
 ## Service Worker
 
-`public/OneSignalSDKWorker.js` は配備後に次のように取得できる必要があります。
+`public/OneSignalSDKWorker.js` と `public/OneSignalSDKUpdaterWorker.js` は配備後に次のように取得できる必要があります。
 
 ```text
 https://ACCOUNT.github.io/REPOSITORY/OneSignalSDKWorker.js
+https://ACCOUNT.github.io/REPOSITORY/OneSignalSDKUpdaterWorker.js
 ```
 
 ユーザー／Organizationサイトの場合は次の形式です。
 
 ```text
 https://ACCOUNT.github.io/OneSignalSDKWorker.js
+https://ACCOUNT.github.io/OneSignalSDKUpdaterWorker.js
 ```
 
 GitHub Pages の project site では base path があるため、初期化時に `serviceWorkerPath` と `serviceWorkerParam.scope` を `import.meta.env.BASE_URL` から設定します。
+
+OneSignal管理画面のWeb Configurationでは、GitHub Pagesのproject site向けに次を設定します。
+
+```text
+Site URL: https://dueyama.github.io
+Path to service worker files: /jyousenji-dayori/
+Main service worker filename: OneSignalSDKWorker.js
+Updater service worker filename: OneSignalSDKUpdaterWorker.js
+Service worker registration scope: /jyousenji-dayori/
+```
+
+Welcome Notification と Persistence は初期版では無効にします。通知送信はOneSignal管理画面から人間が手動で行います。
 
 ## 利用者への許可要求
 

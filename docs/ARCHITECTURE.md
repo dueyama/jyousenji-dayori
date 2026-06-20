@@ -26,7 +26,7 @@ OneSignal Web Push（購読管理・手動通知配信）
 
 ## PWA
 
-初期版では独自のオフラインキャッシュ用Service Workerを追加しません。Service WorkerはOneSignal用の `public/OneSignalSDKWorker.js` のみです。
+初期版では独自のオフラインキャッシュ用Service Workerを追加しません。Service WorkerファイルはOneSignal用の `public/OneSignalSDKWorker.js` と `public/OneSignalSDKUpdaterWorker.js` だけです。
 
 `public/manifest.webmanifest` は相対 `start_url` と `scope` を使い、GitHub Pages のbase path配下でも同じファイルで動作します。
 

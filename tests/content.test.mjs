@@ -47,10 +47,18 @@ test("notification code does not contain REST sending", async () => {
     path.join(root, "public/OneSignalSDKWorker.js"),
     "utf8",
   );
+  const updaterWorker = await readFile(
+    path.join(root, "public/OneSignalSDKUpdaterWorker.js"),
+    "utf8",
+  );
   assert.doesNotMatch(preview, /fetch\s*\(/);
   assert.doesNotMatch(preview, /api\.onesignal\.com\/notifications/i);
   assert.match(
     worker,
+    /cdn\.onesignal\.com\/sdks\/web\/v16\/OneSignalSDK\.sw\.js/,
+  );
+  assert.match(
+    updaterWorker,
     /cdn\.onesignal\.com\/sdks\/web\/v16\/OneSignalSDK\.sw\.js/,
   );
 });

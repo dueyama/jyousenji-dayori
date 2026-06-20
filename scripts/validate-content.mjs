@@ -175,19 +175,23 @@ async function validatePublicAssets() {
     }
   }
 
-  const workerPath = path.join(root, "public/OneSignalSDKWorker.js");
-  if (!(await pathExists(workerPath))) {
-    fail("public/OneSignalSDKWorker.js がありません");
-  } else {
+  for (const workerFile of [
+    "OneSignalSDKWorker.js",
+    "OneSignalSDKUpdaterWorker.js",
+  ]) {
+    const workerPath = path.join(root, "public", workerFile);
+    if (!(await pathExists(workerPath))) {
+      fail(`public/${workerFile} がありません`);
+      continue;
+    }
+
     const worker = await readFile(workerPath, "utf8");
     if (
       !worker.includes(
         "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js",
       )
     ) {
-      fail(
-        "OneSignalSDKWorker.js は公式Web SDK v16のworkerを読み込んでください",
-      );
+      fail(`${workerFile} は公式Web SDK v16のworkerを読み込んでください`);
     }
   }
 }
@@ -236,6 +240,7 @@ async function validateDistIfPresent(allEntries) {
   for (const required of [
     "manifest.webmanifest",
     "OneSignalSDKWorker.js",
+    "OneSignalSDKUpdaterWorker.js",
     "rss.xml",
     "sitemap.xml",
   ]) {

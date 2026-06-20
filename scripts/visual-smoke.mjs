@@ -94,6 +94,21 @@ try {
       "OneSignalSDKWorker.js does not reference Web SDK v16 worker",
     );
   }
+
+  const updaterWorkerResponse = await page.goto(
+    `${baseUrl}/OneSignalSDKUpdaterWorker.js`,
+  );
+  if (updaterWorkerResponse?.status() !== 200) {
+    failures.push(
+      `OneSignalSDKUpdaterWorker.js status ${updaterWorkerResponse?.status()}`,
+    );
+  }
+  const updaterWorkerBody = (await page.textContent("body")) ?? "";
+  if (!updaterWorkerBody.includes("web/v16/OneSignalSDK.sw.js")) {
+    failures.push(
+      "OneSignalSDKUpdaterWorker.js does not reference Web SDK v16 worker",
+    );
+  }
 } finally {
   await browser.close();
 }
