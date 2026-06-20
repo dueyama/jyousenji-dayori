@@ -273,9 +273,10 @@ async function validateHtmlSmoke(htmlFiles) {
 
 async function validateInternalLinks(dist, htmlFiles) {
   const basePath = normalizeBase(
-    process.env.PUBLIC_BASE_PATH ??
-      process.env.BASE_PATH ??
-      inferBaseFromRepository(),
+    firstNonBlank(process.env.PUBLIC_BASE_PATH, process.env.BASE_PATH) ??
+      inferBaseFromRepository() ??
+      (await inferBaseFromBuiltHtml(dist, htmlFiles)) ??
+      "/",
   );
   for (const file of htmlFiles) {
     const html = await readFile(file, "utf8");
@@ -316,10 +317,14 @@ function normalizeBase(value) {
   return leading.endsWith("/") ? leading : `${leading}/`;
 }
 
+function firstNonBlank(...values) {
+  return values.find((value) => value && value.trim().length > 0);
+}
+
 function inferBaseFromRepository() {
   const repository = process.env.GITHUB_REPOSITORY;
   if (!repository) {
-    return "/";
+    return undefined;
   }
 
   const [, repoName] = repository.split("/");
@@ -328,6 +333,43 @@ function inferBaseFromRepository() {
   }
 
   return `/${repoName}/`;
+}
+
+async function inferBaseFromBuiltHtml(dist, htmlFiles) {
+  for (const file of htmlFiles) {
+    const html = await readFile(file, "utf8");
+    const attrs = [...html.matchAll(/\s(?:href|src)="([^"]+)"/g)].map(
+      (match) => match[1],
+    );
+
+    for (const attr of attrs) {
+      if (shouldSkipUrl(attr) || !attr.startsWith("/")) {
+        continue;
+      }
+
+      const [withoutHash] = attr.split("#");
+      const [withoutQuery] = withoutHash.split("?");
+      const pathname = withoutQuery.replace(/^\/+/, "");
+      const rootTarget = toFilePath(path.join(dist, pathname));
+      if (await pathExists(rootTarget)) {
+        continue;
+      }
+
+      const [firstSegment, ...remainingSegments] = pathname.split("/");
+      if (!firstSegment || remainingSegments.length === 0) {
+        continue;
+      }
+
+      const strippedTarget = toFilePath(
+        path.join(dist, remainingSegments.join("/")),
+      );
+      if (await pathExists(strippedTarget)) {
+        return `/${firstSegment}/`;
+      }
+    }
+  }
+
+  return undefined;
 }
 
 function resolveDistTarget(dist, file, value, basePath) {
