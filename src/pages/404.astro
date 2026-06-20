@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBasePath } from "../lib/urls";
+---
+
+<BaseLayout title="ページが見つかりません" canonicalPath="/404/">
+  <section class="content-page page-title">
+    <h1>ページが見つかりません</h1>
+    <p>URLが変わったか、ページが公開されていない可能性があります。</p>
+    <p>
+      <a class="button" href={withBasePath("/")}>ホームへ戻る</a>
+    </p>
+  </section>
+</BaseLayout>

@@ -1,0 +1,217 @@
+---
+import Icon from "../components/Icon.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBasePath } from "../lib/urls";
+---
+
+<BaseLayout title="通知を受け取る" canonicalPath="/notifications/">
+  <section class="content-page">
+    <div class="page-title">
+      <h1>通知を受け取る</h1>
+      <p>
+        大切なお知らせや行事予定を、希望する方だけにプッシュ通知でお届けします。
+      </p>
+    </div>
+
+    <div class="notification-panel">
+      <p
+        id="notification-status"
+        class="notification-status"
+        role="status"
+        aria-live="polite"
+      >
+        通知の状態を確認しています。
+      </p>
+      <button
+        id="notification-button"
+        class="button button--wide"
+        type="button"
+      >
+        <Icon name="bell" />
+        通知を受け取る
+      </button>
+      <p>
+        ブラウザーの確認画面が出たら「許可」を選んでください。通知が不要になった場合は、端末またはブラウザーの設定から停止できます。
+      </p>
+    </div>
+
+    <section
+      class="section section--after-fixed-nav prose"
+      aria-labelledby="ios-title"
+    >
+      <h2 id="ios-title">iPhone／iPadの場合</h2>
+      <ol>
+        <li>Safariでこのサイトを開きます。</li>
+        <li>共有ボタンから「ホーム画面に追加」を選びます。</li>
+        <li>
+          追加したホーム画面のアイコンから開き、このページのボタンを押します。
+        </li>
+      </ol>
+    </section>
+
+    <section class="section prose" aria-labelledby="android-title">
+      <h2 id="android-title">Androidの場合</h2>
+      <ol>
+        <li>Chromeなど対応ブラウザーでこのサイトを開きます。</li>
+        <li>このページの「通知を受け取る」を押します。</li>
+        <li>必要に応じて、ブラウザーのメニューからホーム画面へ追加します。</li>
+      </ol>
+    </section>
+
+    <p>
+      <a class="button button--secondary" href={withBasePath("/guide/")}
+        >ホーム画面への追加手順を見る</a
+      >
+    </p>
+  </section>
+
+  <script>
+    const status = document.querySelector<HTMLElement>("#notification-status");
+    const button = document.querySelector<HTMLButtonElement>(
+      "#notification-button",
+    );
+
+    const setStatus = (message: string) => {
+      if (status) {
+        status.textContent = message;
+      }
+    };
+
+    const isIos = () =>
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.userAgent.includes("Mac") && navigator.maxTouchPoints > 1);
+
+    const isStandalone = () =>
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (window.navigator as Navigator & { standalone?: boolean }).standalone ===
+        true;
+
+    const waitForOneSignal = () =>
+      new Promise<OneSignalWebSdk>((resolve, reject) => {
+        if (!window.JOSENJI_ONESIGNAL_CONFIG?.appId) {
+          reject(new Error("通知機能は準備中です。"));
+          return;
+        }
+
+        const timeout = window.setTimeout(() => {
+          reject(
+            new Error(
+              "通知の準備に時間がかかっています。しばらくしてからお試しください。",
+            ),
+          );
+        }, 8000);
+
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred.push((oneSignal) => {
+          window.clearTimeout(timeout);
+          resolve(oneSignal);
+        });
+      });
+
+    const refreshState = async () => {
+      if (!button) {
+        return;
+      }
+
+      const config = window.JOSENJI_ONESIGNAL_CONFIG;
+      if (!config?.appId) {
+        button.disabled = true;
+        setStatus(
+          "通知機能は準備中です。お知らせと行事予定は通常どおり閲覧できます。",
+        );
+        return;
+      }
+
+      if (
+        !("Notification" in window) ||
+        !("serviceWorker" in navigator) ||
+        !window.isSecureContext
+      ) {
+        button.disabled = true;
+        setStatus("この端末またはブラウザーでは通知を利用できません。");
+        return;
+      }
+
+      if (isIos() && !isStandalone()) {
+        button.disabled = true;
+        setStatus(
+          "iPhone／iPadでは、先にホーム画面へ追加し、そのアイコンから開いてください。",
+        );
+        return;
+      }
+
+      if (Notification.permission === "denied") {
+        button.disabled = true;
+        setStatus(
+          "通知が拒否されています。変更する場合はブラウザーまたは端末の設定を開いてください。",
+        );
+        return;
+      }
+
+      try {
+        const oneSignal = await waitForOneSignal();
+        if (!oneSignal.Notifications.isPushSupported()) {
+          button.disabled = true;
+          setStatus("このブラウザーでは通知を利用できません。");
+          return;
+        }
+
+        if (
+          oneSignal.Notifications.permission &&
+          oneSignal.User.PushSubscription.optedIn
+        ) {
+          setStatus("通知は登録済みです。");
+          button.textContent = "通知は登録済みです";
+          button.disabled = true;
+        } else {
+          setStatus("通知はまだ登録されていません。");
+          button.disabled = false;
+        }
+      } catch (error) {
+        button.disabled = true;
+        setStatus(
+          error instanceof Error
+            ? error.message
+            : "通知の状態を確認できませんでした。",
+        );
+      }
+    };
+
+    button?.addEventListener("click", async () => {
+      if (!button) {
+        return;
+      }
+
+      button.disabled = true;
+      setStatus("通知の許可を確認しています。");
+
+      try {
+        const oneSignal = await waitForOneSignal();
+        if (!oneSignal.Notifications.isPushSupported()) {
+          setStatus("このブラウザーでは通知を利用できません。");
+          return;
+        }
+
+        await oneSignal.Notifications.requestPermission();
+
+        if (oneSignal.Notifications.permission) {
+          await oneSignal.User.PushSubscription.optIn();
+          setStatus("通知を受け取る設定が完了しました。");
+          button.textContent = "通知は登録済みです";
+        } else {
+          setStatus(
+            "通知は許可されませんでした。必要な場合はブラウザーの設定から変更できます。",
+          );
+          button.disabled = false;
+        }
+      } catch {
+        setStatus(
+          "通知の設定に失敗しました。時間をおいてもう一度お試しください。",
+        );
+        button.disabled = false;
+      }
+    });
+
+    void refreshState();
+  </script>
+</BaseLayout>

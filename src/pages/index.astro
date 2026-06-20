@@ -1,0 +1,89 @@
+---
+import { getCollection } from "astro:content";
+import EventList from "../components/EventList.astro";
+import Icon from "../components/Icon.astro";
+import NoticeList from "../components/NoticeList.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteConfig } from "../config/site";
+import { isFutureOrToday, sortByNewest, sortEventsByStart } from "../lib/dates";
+import { withBasePath } from "../lib/urls";
+
+const notices = sortByNewest(
+  await getCollection("notices", ({ data }) => !data.draft),
+).slice(0, 4);
+const events = sortEventsByStart(
+  (await getCollection("events", ({ data }) => !data.draft)).filter((event) =>
+    isFutureOrToday(event.data.startAt),
+  ),
+).slice(0, 4);
+
+const externalLinks = [
+  {
+    href: siteConfig.googleSitesUrl,
+    label: "Google Sites公式ページ",
+    icon: "external",
+  },
+  { href: siteConfig.lineUrl, label: "公式LINE", icon: "external" },
+].filter((link) => link.href);
+---
+
+<BaseLayout>
+  <section class="hero" aria-labelledby="home-title">
+    <div>
+      <h1 id="home-title">浄泉寺 お知らせ</h1>
+      <p>
+        お知らせ、写真、行事予定をスマートフォンで読みやすくお届けします。通知は希望する方だけが登録できます。
+      </p>
+      <div class="action-row">
+        <a class="button" href={withBasePath("/notifications/")}>
+          <Icon name="bell" />
+          通知を受け取る
+        </a>
+        <a class="button button--secondary" href={withBasePath("/guide/")}>
+          <Icon name="info" />
+          利用案内
+        </a>
+      </div>
+    </div>
+    <div class="hero__mark" aria-hidden="true">浄</div>
+  </section>
+
+  {
+    externalLinks.length > 0 && (
+      <section class="section" aria-labelledby="external-title">
+        <div class="section__header">
+          <h2 id="external-title">公式リンク</h2>
+        </div>
+        <div class="contact-grid">
+          {externalLinks.map((link) => (
+            <a
+              class="button button--secondary"
+              href={link.href}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {link.label}
+              <Icon name={link.icon} />
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section" aria-labelledby="latest-notices">
+    <div class="section__header">
+      <h2 id="latest-notices">最新のお知らせ</h2>
+      <a href={withBasePath("/notices/")}>すべて見る</a>
+    </div>
+    <NoticeList notices={notices} />
+  </section>
+
+  <section class="section" aria-labelledby="upcoming-events">
+    <div class="section__header">
+      <h2 id="upcoming-events">行事予定</h2>
+      <a href={withBasePath("/events/")}>すべて見る</a>
+    </div>
+    <EventList events={events} />
+  </section>
+</BaseLayout>

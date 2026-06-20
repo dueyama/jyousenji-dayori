@@ -1,0 +1,56 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Icon from "./Icon.astro";
+import { formatDateTime } from "../lib/dates";
+import { withBasePath } from "../lib/urls";
+
+const { events, emptyText = "公開中の行事予定はまだありません。" } =
+  Astro.props as {
+    events: CollectionEntry<"events">[];
+    emptyText?: string;
+  };
+
+const statusLabel = {
+  scheduled: "予定",
+  cancelled: "中止",
+  postponed: "延期",
+} as const;
+---
+
+{
+  events.length > 0 ? (
+    <ol class="entry-list">
+      {events.map((event) => (
+        <li>
+          <a class="entry-row" href={withBasePath(`/events/${event.id}/`)}>
+            <span class="entry-row__icon" aria-hidden="true">
+              <Icon name="calendar" />
+            </span>
+            <span class="entry-row__body">
+              <span class="entry-row__meta">
+                <time datetime={event.data.startAt}>
+                  {formatDateTime(event.data.startAt)}
+                </time>
+                <span
+                  class:list={[
+                    "status-label",
+                    `status-label--${event.data.status}`,
+                  ]}
+                >
+                  {statusLabel[event.data.status]}
+                </span>
+              </span>
+              <span class="entry-row__title">{event.data.title}</span>
+              <span class="entry-row__summary">{event.data.summary}</span>
+            </span>
+            <span class="entry-row__arrow" aria-hidden="true">
+              ›
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="empty-state">{emptyText}</p>
+  )
+}

@@ -1,0 +1,104 @@
+---
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import { siteConfig } from "../config/site";
+import { absoluteSiteUrl, withBasePath } from "../lib/urls";
+import "../styles/global.css";
+
+const {
+  title = siteConfig.name,
+  description = siteConfig.description,
+  canonicalPath = "/",
+} = Astro.props as {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+};
+
+const pageTitle =
+  title === siteConfig.name ? title : `${title} | ${siteConfig.name}`;
+const canonicalUrl = absoluteSiteUrl(Astro.site, canonicalPath);
+const oneSignalAppId = siteConfig.oneSignalAppId;
+const rawBasePath = import.meta.env.BASE_URL || "/";
+const basePath =
+  rawBasePath === "/"
+    ? "/"
+    : rawBasePath.endsWith("/")
+      ? rawBasePath
+      : `${rawBasePath}/`;
+const serviceWorkerPath = `${basePath.replace(/^\/+/, "")}OneSignalSDKWorker.js`;
+const serviceWorkerScope = basePath;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content={siteConfig.themeColor} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="manifest" href={withBasePath("/manifest.webmanifest")} />
+    <link rel="icon" href={withBasePath("/icons/icon-192.png")} />
+    <link rel="apple-touch-icon" href={withBasePath("/icons/icon-192.png")} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    {
+      oneSignalAppId && (
+        <script
+          is:inline
+          src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+          defer
+        />
+      )
+    }
+    <script
+      is:inline
+      define:vars={{
+        oneSignalAppId,
+        basePath,
+        serviceWorkerPath,
+        serviceWorkerScope,
+      }}
+    >
+      window.JOSENJI_ONESIGNAL_CONFIG = {
+        appId: oneSignalAppId,
+        basePath,
+        serviceWorkerPath,
+        serviceWorkerScope,
+      };
+
+      if (oneSignalAppId) {
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred.push(async function (OneSignal) {
+          try {
+            await OneSignal.init({
+              appId: oneSignalAppId,
+              serviceWorkerPath,
+              serviceWorkerParam: { scope: serviceWorkerScope },
+              notifyButton: { enable: false },
+              welcomeNotification: { disable: true },
+            });
+            window.dispatchEvent(new CustomEvent("jyousenji:onesignal-ready"));
+          } catch (error) {
+            window.JOSENJI_ONESIGNAL_ERROR =
+              error instanceof Error
+                ? error.message
+                : "OneSignalの初期化に失敗しました。";
+            window.dispatchEvent(new CustomEvent("jyousenji:onesignal-error"));
+          }
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <SiteHeader />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

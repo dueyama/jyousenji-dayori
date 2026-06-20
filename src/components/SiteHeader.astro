@@ -1,0 +1,50 @@
+---
+import Icon from "./Icon.astro";
+import { siteConfig } from "../config/site";
+import { withBasePath } from "../lib/urls";
+
+const navItems = [
+  { href: "/", label: "ホーム", icon: "home" },
+  { href: "/notices/", label: "お知らせ", icon: "notice" },
+  { href: "/events/", label: "行事予定", icon: "calendar" },
+  { href: "/notifications/", label: "通知", icon: "bell" },
+  { href: "/guide/", label: "利用案内", icon: "info" },
+] as const;
+---
+
+<header class="site-header">
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <div class="site-header__inner">
+    <a
+      class="brand"
+      href={withBasePath("/")}
+      aria-label={`${siteConfig.name} ホーム`}
+    >
+      <span class="brand__mark" aria-hidden="true">浄</span>
+      <span class="brand__text"
+        >{siteConfig.shortName}<span>お知らせ</span></span
+      >
+    </a>
+    <nav class="desktop-nav" aria-label="主要メニュー">
+      {
+        navItems.map((item) => (
+          <a href={withBasePath(item.href)}>
+            <Icon name={item.icon} />
+            <span>{item.label}</span>
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<nav class="bottom-nav" aria-label="主要メニュー">
+  {
+    navItems.slice(0, 4).map((item) => (
+      <a href={withBasePath(item.href)}>
+        <Icon name={item.icon} />
+        <span>{item.label}</span>
+      </a>
+    ))
+  }
+</nav>

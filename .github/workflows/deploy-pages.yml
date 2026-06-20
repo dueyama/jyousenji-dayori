@@ -1,0 +1,80 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+      PUBLIC_BASE_PATH: ${{ vars.PUBLIC_BASE_PATH }}
+      PUBLIC_ONESIGNAL_APP_ID: ${{ vars.PUBLIC_ONESIGNAL_APP_ID }}
+      PUBLIC_GOOGLE_SITES_URL: ${{ vars.PUBLIC_GOOGLE_SITES_URL }}
+      PUBLIC_LINE_URL: ${{ vars.PUBLIC_LINE_URL }}
+      PUBLIC_TEMPLE_ADDRESS: ${{ vars.PUBLIC_TEMPLE_ADDRESS }}
+      PUBLIC_MAP_URL: ${{ vars.PUBLIC_MAP_URL }}
+      PUBLIC_TEMPLE_PHONE: ${{ vars.PUBLIC_TEMPLE_PHONE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run check
+
+      - name: Validate content
+        run: npm run validate:content
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: Validate built site
+        run: npm run validate:content
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

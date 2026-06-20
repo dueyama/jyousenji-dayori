@@ -1,0 +1,39 @@
+{
+  "name": "jyousenji-dayori",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "node scripts/lint.mjs",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "test": "node --test tests/*.test.mjs",
+    "test:visual": "node scripts/visual-smoke.mjs",
+    "validate:content": "node scripts/validate-content.mjs",
+    "generate:icons": "node scripts/generate-icons.mjs",
+    "prebuild": "node scripts/generate-icons.mjs",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "notification:preview": "node scripts/notification-preview.mjs"
+  },
+  "dependencies": {
+    "astro": "^6.4.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "playwright": "^1.61.0",
+    "prettier": "^3.8.4",
+    "prettier-plugin-astro": "^0.14.1",
+    "sharp": "^0.35.2",
+    "typescript": "^6.0.3"
+  },
+  "overrides": {
+    "esbuild": "0.28.1",
+    "yaml": "^2.9.0"
+  }
+}

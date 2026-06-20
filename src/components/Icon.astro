@@ -1,0 +1,37 @@
+---
+type IconName =
+  | "home"
+  | "notice"
+  | "calendar"
+  | "bell"
+  | "info"
+  | "external"
+  | "share"
+  | "menu";
+
+const { name, label } = Astro.props as { name: IconName; label?: string };
+
+const paths: Record<IconName, string> = {
+  home: '<path d="M4 11.5 12 5l8 6.5v7a1.5 1.5 0 0 1-1.5 1.5H15v-5.5H9V20H5.5A1.5 1.5 0 0 1 4 18.5v-7Z" />',
+  notice:
+    '<path d="M6 4.5h8l4 4V19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1Z" /><path d="M14 4.5V9h4" /><path d="M8 13h8M8 16h6" />',
+  calendar:
+    '<path d="M6.5 4v3M17.5 4v3" /><path d="M5 6h14a1.5 1.5 0 0 1 1.5 1.5V19A1.5 1.5 0 0 1 19 20.5H5A1.5 1.5 0 0 1 3.5 19V7.5A1.5 1.5 0 0 1 5 6Z" /><path d="M4 10h16" /><path d="m8 15 2 2 5-5" />',
+  bell: '<path d="M18 16H6l1.3-1.8V10a4.7 4.7 0 0 1 9.4 0v4.2L18 16Z" /><path d="M10 19a2 2 0 0 0 4 0" />',
+  info: '<circle cx="12" cy="12" r="8.5" /><path d="M12 10.5v5" /><path d="M12 7.5h.01" />',
+  external:
+    '<path d="M8 8h8v8" /><path d="m7 17 9-9" /><path d="M18 12v6H6V6h6" />',
+  share:
+    '<path d="M16.5 8.5 12 4 7.5 8.5" /><path d="M12 4v11" /><path d="M5.5 12.5V19h13v-6.5" />',
+  menu: '<path d="M5 7h14M5 12h14M5 17h14" />',
+};
+---
+
+<svg
+  class="icon"
+  viewBox="0 0 24 24"
+  aria-hidden={label ? "false" : "true"}
+  aria-label={label}
+  role={label ? "img" : undefined}
+  set:html={paths[name]}
+/>

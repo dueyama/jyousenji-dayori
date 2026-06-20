@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+import EventList from "../../components/EventList.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { isFutureOrToday, sortEventsByStart } from "../../lib/dates";
+
+const allEvents = await getCollection("events", ({ data }) => !data.draft);
+const upcomingEvents = sortEventsByStart(
+  allEvents.filter((event) => isFutureOrToday(event.data.startAt)),
+);
+const pastEvents = sortEventsByStart(
+  allEvents.filter((event) => !isFutureOrToday(event.data.startAt)),
+).reverse();
+---
+
+<BaseLayout title="行事予定" canonicalPath="/events/">
+  <section class="page-title">
+    <h1>行事予定</h1>
+    <p>今後の行事を近い順に掲載します。中止や延期の場合は状態を表示します。</p>
+  </section>
+
+  <section class="section" aria-labelledby="upcoming-events">
+    <div class="section__header">
+      <h2 id="upcoming-events">今後の行事</h2>
+    </div>
+    <EventList events={upcomingEvents} />
+  </section>
+
+  <section class="section" aria-labelledby="past-events">
+    <div class="section__header">
+      <h2 id="past-events">過去の行事</h2>
+    </div>
+    <EventList events={pastEvents} emptyText="過去の行事はまだありません。" />
+  </section>
+</BaseLayout>

@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Icon from "./Icon.astro";
+import { formatDate } from "../lib/dates";
+import { withBasePath } from "../lib/urls";
+
+const { notices, emptyText = "公開中のお知らせはまだありません。" } =
+  Astro.props as {
+    notices: CollectionEntry<"notices">[];
+    emptyText?: string;
+  };
+---
+
+{
+  notices.length > 0 ? (
+    <ol class="entry-list">
+      {notices.map((notice) => (
+        <li>
+          <a class="entry-row" href={withBasePath(`/notices/${notice.id}/`)}>
+            <span class="entry-row__icon" aria-hidden="true">
+              <Icon name="notice" />
+            </span>
+            <span class="entry-row__body">
+              <span class="entry-row__meta">
+                <time datetime={notice.data.publishedAt}>
+                  {formatDate(notice.data.publishedAt)}
+                </time>
+                <span>{notice.data.category}</span>
+              </span>
+              <span class="entry-row__title">{notice.data.title}</span>
+              <span class="entry-row__summary">{notice.data.summary}</span>
+            </span>
+            <span class="entry-row__arrow" aria-hidden="true">
+              ›
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="empty-state">{emptyText}</p>
+  )
+}

@@ -1,0 +1,46 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBasePath } from "../lib/urls";
+---
+
+<BaseLayout title="利用案内" canonicalPath="/guide/">
+  <section class="content-page">
+    <div class="page-title">
+      <h1>利用案内</h1>
+      <p>
+        このサイトをスマートフォンのホーム画面に追加すると、アプリのように開けます。
+      </p>
+    </div>
+
+    <section class="section prose" aria-labelledby="iphone">
+      <h2 id="iphone">iPhone／iPadでホーム画面に追加する</h2>
+      <ol>
+        <li>Safariでこのサイトを開きます。</li>
+        <li>画面下部または上部の共有ボタンを押します。</li>
+        <li>「ホーム画面に追加」を選びます。</li>
+        <li>追加されたアイコンから開きます。</li>
+      </ol>
+    </section>
+
+    <section class="section prose" aria-labelledby="android">
+      <h2 id="android">Androidでホーム画面に追加する</h2>
+      <ol>
+        <li>Chromeでこのサイトを開きます。</li>
+        <li>画面右上のメニューを開きます。</li>
+        <li>「ホーム画面に追加」または「アプリをインストール」を選びます。</li>
+      </ol>
+    </section>
+
+    <section class="section prose" aria-labelledby="share">
+      <h2 id="share">記事を共有する</h2>
+      <p>
+        お知らせや行事のページでは共有ボタンを使えます。対応していない端末では、ページURLをコピーします。
+      </p>
+    </section>
+
+    <p>
+      <a class="button" href={withBasePath("/notifications/")}>通知設定へ進む</a
+      >
+    </p>
+  </section>
+</BaseLayout>

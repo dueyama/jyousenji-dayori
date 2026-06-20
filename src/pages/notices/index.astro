@@ -1,0 +1,18 @@
+---
+import { getCollection } from "astro:content";
+import NoticeList from "../../components/NoticeList.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { sortByNewest } from "../../lib/dates";
+
+const notices = sortByNewest(
+  await getCollection("notices", ({ data }) => !data.draft),
+);
+---
+
+<BaseLayout title="お知らせ" canonicalPath="/notices/">
+  <section class="page-title">
+    <h1>お知らせ</h1>
+    <p>公開中のお知らせを新しい順に掲載します。</p>
+  </section>
+  <NoticeList notices={notices} />
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+import Icon from "./Icon.astro";
+
+const { title, text } = Astro.props as { title: string; text: string };
+---
+
+<button
+  class="share-button"
+  type="button"
+  data-share-button
+  data-share-title={title}
+  data-share-text={text}
+>
+  <Icon name="share" />
+  <span>共有</span>
+</button>
+
+<script>
+  const shareButtons = document.querySelectorAll<HTMLButtonElement>(
+    "[data-share-button]",
+  );
+
+  for (const button of shareButtons) {
+    button.addEventListener("click", async () => {
+      const title = button.dataset.shareTitle ?? document.title;
+      const text = button.dataset.shareText ?? "";
+      const url = window.location.href;
+
+      try {
+        if (navigator.share) {
+          await navigator.share({ title, text, url });
+        } else if (navigator.clipboard) {
+          await navigator.clipboard.writeText(url);
+          button.querySelector("span")!.textContent = "URLをコピーしました";
+          window.setTimeout(() => {
+            button.querySelector("span")!.textContent = "共有";
+          }, 2500);
+        }
+      } catch {
+        button.querySelector("span")!.textContent = "共有できませんでした";
+        window.setTimeout(() => {
+          button.querySelector("span")!.textContent = "共有";
+        }, 2500);
+      }
+    });
+  }
+</script>
