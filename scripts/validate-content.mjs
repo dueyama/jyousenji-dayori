@@ -273,7 +273,9 @@ async function validateHtmlSmoke(htmlFiles) {
 
 async function validateInternalLinks(dist, htmlFiles) {
   const basePath = normalizeBase(
-    process.env.PUBLIC_BASE_PATH ?? process.env.BASE_PATH ?? "/",
+    process.env.PUBLIC_BASE_PATH ??
+      process.env.BASE_PATH ??
+      inferBaseFromRepository(),
   );
   for (const file of htmlFiles) {
     const html = await readFile(file, "utf8");
@@ -312,6 +314,20 @@ function normalizeBase(value) {
   }
   const leading = value.startsWith("/") ? value : `/${value}`;
   return leading.endsWith("/") ? leading : `${leading}/`;
+}
+
+function inferBaseFromRepository() {
+  const repository = process.env.GITHUB_REPOSITORY;
+  if (!repository) {
+    return "/";
+  }
+
+  const [, repoName] = repository.split("/");
+  if (!repoName || repoName.endsWith(".github.io")) {
+    return "/";
+  }
+
+  return `/${repoName}/`;
 }
 
 function resolveDistTarget(dist, file, value, basePath) {
