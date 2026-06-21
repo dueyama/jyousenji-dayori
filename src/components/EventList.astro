@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import Icon from "./Icon.astro";
-import { formatDateTime } from "../lib/dates";
+import { formatEventSchedule } from "../lib/dates";
 import { withBasePath } from "../lib/urls";
 
 const { events, emptyText = "公開中の行事予定はまだありません。" } =
@@ -29,7 +29,7 @@ const statusLabel = {
             <span class="entry-row__body">
               <span class="entry-row__meta">
                 <time datetime={event.data.startAt}>
-                  {formatDateTime(event.data.startAt)}
+                  {formatEventSchedule(event.data)}
                 </time>
                 <span
                   class:list={[

@@ -17,6 +17,23 @@ export function formatDate(value: string): string {
   return dateFormatter.format(new Date(value));
 }
 
+export function formatEventSchedule(data: {
+  startAt: string;
+  endAt: string;
+  allDay: boolean;
+}): string {
+  if (!data.allDay) {
+    return formatDateTime(data.startAt);
+  }
+
+  const startDate = formatDate(data.startAt);
+  const endDate = formatDate(data.endAt);
+  if (data.startAt.slice(0, 10) === data.endAt.slice(0, 10)) {
+    return `${startDate}（終日）`;
+  }
+  return `${startDate}〜${endDate}（終日）`;
+}
+
 export function sortByNewest<T extends { data: { publishedAt: string } }>(
   items: T[],
 ): T[] {

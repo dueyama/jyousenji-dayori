@@ -4,6 +4,6 @@ dist/
 .env
 .env.*
 !.env.example
+private/
 npm-debug.log*
 .DS_Store
-

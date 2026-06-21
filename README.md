@@ -38,6 +38,8 @@ npm run build
 
 サンプル記事はすべて `draft: true` です。公開する記事は日時、場所、写真の掲載許可、代替テキストを確認してから `draft: false` にしてください。
 
+法座予定の時刻変換ルールとGoogle Calendar同期方針は `docs/GOOGLE_CALENDAR.md` を参照してください。法座予定で「午前」は10:00から12:00、「午後」は13:30から15:30として扱います。
+
 ## 手動通知プレビュー
 
 通知は送信しません。公開済み記事の通知文面だけを生成します。
@@ -48,4 +50,4 @@ npm run notification:preview -- <content-id>
 
 OneSignal管理画面で人間が内容と対象を確認して送信します。
 
-詳細は `docs/SETUP.md`、`docs/OPERATIONS.md`、`docs/ONESIGNAL.md` を参照してください。
+詳細は `docs/SETUP.md`、`docs/OPERATIONS.md`、`docs/ONESIGNAL.md`、`docs/GOOGLE_CALENDAR.md` を参照してください。

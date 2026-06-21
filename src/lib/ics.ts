@@ -19,6 +19,15 @@ function toDateValue(value: string): string {
   return value.slice(0, 10).replace(/-/g, "");
 }
 
+function toExclusiveDateValue(value: string): string {
+  const [year, month, day] = value
+    .slice(0, 10)
+    .split("-")
+    .map((part) => Number.parseInt(part, 10));
+  const date = new Date(Date.UTC(year, month - 1, day + 1));
+  return date.toISOString().slice(0, 10).replace(/-/g, "");
+}
+
 export function eventToIcs(
   entry: CollectionEntry<"events">,
   siteUrl: string,
@@ -29,7 +38,7 @@ export function eventToIcs(
     ? `DTSTART;VALUE=DATE:${toDateValue(data.startAt)}`
     : `DTSTART:${toUtcStamp(data.startAt)}`;
   const endLine = allDay
-    ? `DTEND;VALUE=DATE:${toDateValue(data.endAt)}`
+    ? `DTEND;VALUE=DATE:${toExclusiveDateValue(data.endAt)}`
     : `DTEND:${toUtcStamp(data.endAt)}`;
   const status = data.status === "cancelled" ? "CANCELLED" : "CONFIRMED";
 
