@@ -1,15 +1,58 @@
 ---
+import { Image } from "astro:assets";
+import Icon from "../components/Icon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteConfig } from "../config/site";
+import templePhoto from "../assets/site/jyousenji-hondo.jpg";
+
+const accessLinks = [
+  {
+    href: siteConfig.googleSitesUrl,
+    label: "浄泉寺公式ページを開く",
+    description: "浄泉寺の基本情報や案内をご覧いただけます。",
+  },
+  {
+    href: siteConfig.googleSitesAccessUrl,
+    label: "アクセスを見る",
+    description: "住所、地図、交通案内は公式サイトで確認できます。",
+  },
+  {
+    href: siteConfig.historyUrl,
+    label: "詳しい歴史を読む",
+    description: "浄泉寺の歴史ページを開きます。",
+  },
+  {
+    href: siteConfig.lineUrl,
+    label: "公式LINEを開く",
+    description: "LINEでの案内を確認できます。",
+  },
+  {
+    href: siteConfig.mapUrl,
+    label: "地図を開く",
+    description: "地図アプリで場所を確認できます。",
+  },
+].filter((link) => link.href);
 ---
 
-<BaseLayout title="このサイトについて" canonicalPath="/about/">
+<BaseLayout title="浄泉寺について" canonicalPath="/about/">
   <section class="content-page prose">
     <div class="page-title">
-      <h1>このサイトについて</h1>
+      <h1>浄泉寺について</h1>
       <p>
         浄泉寺からのお知らせと行事予定を、スマートフォンで読みやすく届けるための公式PWAです。
       </p>
     </div>
+
+    <figure class="intro-photo">
+      <Image
+        src={templePhoto}
+        alt="浄泉寺本堂の外観"
+        widths={[480, 720, 960, 1200]}
+        sizes="(min-width: 760px) 820px, calc(100vw - 32px)"
+        loading="eager"
+        decoding="async"
+      />
+    </figure>
 
     <p>
       既存の公式案内ページは引き続き利用し、このサイトでは更新頻度の高い情報を中心に掲載します。
@@ -18,5 +61,31 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       このサイトはApp StoreやGoogle
       Playを使わず、URLまたはQRコードから利用できます。
     </p>
+
+    <section class="history-brief" aria-labelledby="history-title">
+      <h2 id="history-title">浄泉寺の歴史</h2>
+      <p>
+        公式サイトの歴史ページでは、永正の末（1520）に日置庄実広の地へお堂を創建したことを始まりとし、寛永11年（1634）に「浄泉寺」の寺号を受け、元禄14年（1701）に現在の新別名村鯉原山へ移ったと伝えられています。
+      </p>
+    </section>
+
+    {
+      accessLinks.length > 0 && (
+        <section class="link-panel" aria-labelledby="official-access">
+          <h2 id="official-access">浄泉寺公式ページ・アクセス</h2>
+          <div class="link-panel__list">
+            {accessLinks.map((link) => (
+              <a href={link.href} rel="noopener noreferrer" target="_blank">
+                <span>
+                  <strong>{link.label}</strong>
+                  <small>{link.description}</small>
+                </span>
+                <Icon name="external" />
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
   </section>
 </BaseLayout>

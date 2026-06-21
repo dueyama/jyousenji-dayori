@@ -40,8 +40,17 @@ const serviceWorkerScope = basePath;
     <meta name="theme-color" content={siteConfig.themeColor} />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="manifest" href={withBasePath("/manifest.webmanifest")} />
-    <link rel="icon" href={withBasePath("/icons/icon-192.png")} />
-    <link rel="apple-touch-icon" href={withBasePath("/icons/icon-192.png")} />
+    <link rel="icon" href={withBasePath("/favicon.ico")} sizes="any" />
+    <link
+      rel="icon"
+      href={withBasePath("/icons/favicon-32.png")}
+      sizes="32x32"
+      type="image/png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href={withBasePath("/icons/apple-touch-icon.png")}
+    />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
