@@ -38,9 +38,6 @@ const accessLinks = [
   <section class="content-page prose">
     <div class="page-title">
       <h1>浄泉寺について</h1>
-      <p>
-        浄泉寺からのお知らせと行事予定を、スマートフォンで読みやすく届けるための公式PWAです。
-      </p>
     </div>
 
     <figure class="intro-photo">
@@ -54,13 +51,39 @@ const accessLinks = [
       />
     </figure>
 
-    <p>
-      既存の公式案内ページは引き続き利用し、このサイトでは更新頻度の高い情報を中心に掲載します。
-    </p>
-    <p>
-      このサイトはApp StoreやGoogle
-      Playを使わず、URLまたはQRコードから利用できます。
-    </p>
+    {
+      siteConfig.lineUrl && (
+        <section class="line-callout" aria-labelledby="line-title">
+          <div>
+            <span class="line-callout__eyebrow">浄泉寺LINE</span>
+            <h2 id="line-title">LINEでも法座案内を受け取れます</h2>
+            <p>
+              公式サイトでは、法座の案内などをおおよそ月1回程度配信すると案内されています。
+            </p>
+          </div>
+          <div class="action-row">
+            <a
+              class="button"
+              href={siteConfig.lineUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              浄泉寺LINEを開く
+              <Icon name="external" />
+            </a>
+            <a
+              class="button button--secondary"
+              href={siteConfig.lineGuideUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              登録方法を見る
+              <Icon name="external" />
+            </a>
+          </div>
+        </section>
+      )
+    }
 
     <section class="history-brief" aria-labelledby="history-title">
       <h2 id="history-title">浄泉寺の歴史</h2>

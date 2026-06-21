@@ -1,4 +1,5 @@
 const googleSitesBaseUrl = "https://sites.google.com/view/hitomarujyousenji";
+const defaultLineUrl = "https://lin.ee/2Mw0nK8Vn";
 
 export const siteConfig = {
   name: "浄泉寺公式お知らせ",
@@ -9,7 +10,8 @@ export const siteConfig = {
     import.meta.env.PUBLIC_GOOGLE_SITES_URL ?? `${googleSitesBaseUrl}/Home`,
   googleSitesAccessUrl: `${googleSitesBaseUrl}/access`,
   historyUrl: `${googleSitesBaseUrl}/about/history`,
-  lineUrl: import.meta.env.PUBLIC_LINE_URL ?? "",
+  lineGuideUrl: `${googleSitesBaseUrl}/about/line`,
+  lineUrl: import.meta.env.PUBLIC_LINE_URL ?? defaultLineUrl,
   address: import.meta.env.PUBLIC_TEMPLE_ADDRESS ?? "",
   mapUrl: import.meta.env.PUBLIC_MAP_URL ?? "",
   phone: import.meta.env.PUBLIC_TEMPLE_PHONE ?? "",

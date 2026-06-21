@@ -21,7 +21,16 @@ const navItems = [
       href={withBasePath("/")}
       aria-label={`${siteConfig.name} ホーム`}
     >
-      <span class="brand__mark" aria-hidden="true">浄</span>
+      <span class="brand__mark" aria-hidden="true">
+        <img
+          src={withBasePath("/icons/apple-touch-icon.png")}
+          alt=""
+          width="42"
+          height="42"
+          loading="eager"
+          decoding="async"
+        />
+      </span>
       <span class="brand__text"
         >{siteConfig.shortName}<span>お知らせ</span></span
       >

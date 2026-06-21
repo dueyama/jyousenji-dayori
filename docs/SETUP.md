@@ -46,7 +46,7 @@ PUBLIC_ONESIGNAL_APP_ID=777c076c-c65b-4695-8058-28e2476c85e9
 
 ## 寺院固有設定
 
-未設定の値は画面に表示しません。必要に応じて Repository Variables またはローカル `.env` に設定します。
+未設定の値は画面に表示しません。公式LINEは既定の案内URLを使い、差し替える場合だけ `PUBLIC_LINE_URL` を設定します。必要に応じて Repository Variables またはローカル `.env` に設定します。
 
 ```text
 PUBLIC_GOOGLE_SITES_URL=
