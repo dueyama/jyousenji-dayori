@@ -11,7 +11,7 @@ export const siteConfig = {
   googleSitesAccessUrl: `${googleSitesBaseUrl}/access`,
   historyUrl: `${googleSitesBaseUrl}/about/history`,
   lineGuideUrl: `${googleSitesBaseUrl}/about/line`,
-  lineUrl: import.meta.env.PUBLIC_LINE_URL ?? defaultLineUrl,
+  lineUrl: import.meta.env.PUBLIC_LINE_URL || defaultLineUrl,
   address: import.meta.env.PUBLIC_TEMPLE_ADDRESS ?? "",
   mapUrl: import.meta.env.PUBLIC_MAP_URL ?? "",
   phone: import.meta.env.PUBLIC_TEMPLE_PHONE ?? "",
