@@ -79,6 +79,7 @@ const serviceWorkerScope = basePath;
         serviceWorkerPath,
         serviceWorkerScope,
       };
+      window.JOSENJI_ONESIGNAL_READY = false;
 
       async function clearJyousenjiAppBadge() {
         if (!("clearAppBadge" in navigator)) {
@@ -113,6 +114,8 @@ const serviceWorkerScope = basePath;
               notifyButton: { enable: false },
               welcomeNotification: { disable: true },
             });
+            window.JOSENJI_ONESIGNAL_INSTANCE = OneSignal;
+            window.JOSENJI_ONESIGNAL_READY = true;
             window.dispatchEvent(new CustomEvent("jyousenji:onesignal-ready"));
           } catch (error) {
             window.JOSENJI_ONESIGNAL_ERROR =

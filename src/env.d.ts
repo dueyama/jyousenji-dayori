@@ -22,6 +22,8 @@ interface Window {
     serviceWorkerScope: string;
   };
   JOSENJI_ONESIGNAL_ERROR?: string;
+  JOSENJI_ONESIGNAL_INSTANCE?: OneSignalWebSdk;
+  JOSENJI_ONESIGNAL_READY?: boolean;
   navigator: Navigator & {
     standalone?: boolean;
   };

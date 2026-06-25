@@ -93,7 +93,17 @@ import { withBasePath } from "../lib/urls";
           return;
         }
 
+        if (
+          window.JOSENJI_ONESIGNAL_READY &&
+          window.JOSENJI_ONESIGNAL_INSTANCE
+        ) {
+          resolve(window.JOSENJI_ONESIGNAL_INSTANCE);
+          return;
+        }
+
         const timeout = window.setTimeout(() => {
+          window.removeEventListener("jyousenji:onesignal-ready", handleReady);
+          window.removeEventListener("jyousenji:onesignal-error", handleError);
           reject(
             new Error(
               "通知の準備に時間がかかっています。しばらくしてからお試しください。",
@@ -101,17 +111,92 @@ import { withBasePath } from "../lib/urls";
           );
         }, 8000);
 
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        window.OneSignalDeferred.push((oneSignal) => {
+        const handleReady = () => {
           window.clearTimeout(timeout);
-          resolve(oneSignal);
+          window.removeEventListener("jyousenji:onesignal-error", handleError);
+          if (window.JOSENJI_ONESIGNAL_INSTANCE) {
+            resolve(window.JOSENJI_ONESIGNAL_INSTANCE);
+          } else {
+            reject(new Error("通知の状態を確認できませんでした。"));
+          }
+        };
+
+        const handleError = () => {
+          window.clearTimeout(timeout);
+          window.removeEventListener("jyousenji:onesignal-ready", handleReady);
+          reject(
+            new Error(
+              window.JOSENJI_ONESIGNAL_ERROR ||
+                "通知の状態を確認できませんでした。",
+            ),
+          );
+        };
+
+        window.addEventListener("jyousenji:onesignal-ready", handleReady, {
+          once: true,
+        });
+        window.addEventListener("jyousenji:onesignal-error", handleError, {
+          once: true,
         });
       });
+
+    const delay = (milliseconds: number) =>
+      new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+
+    const readPushState = (oneSignal: OneSignalWebSdk) => ({
+      supported: oneSignal.Notifications.isPushSupported(),
+      permission: oneSignal.Notifications.permission,
+      optedIn: oneSignal.User.PushSubscription.optedIn,
+    });
+
+    const waitForSettledPushState = async (
+      oneSignal: OneSignalWebSdk,
+      timeoutMilliseconds = 5000,
+    ) => {
+      const startedAt = Date.now();
+      let state = readPushState(oneSignal);
+      while (
+        state.supported &&
+        state.permission &&
+        !state.optedIn &&
+        Date.now() - startedAt < timeoutMilliseconds
+      ) {
+        await delay(400);
+        state = readPushState(oneSignal);
+      }
+      return state;
+    };
+
+    let oneSignalListenersAttached = false;
+
+    const attachOneSignalListeners = (oneSignal: OneSignalWebSdk) => {
+      if (oneSignalListenersAttached) {
+        return;
+      }
+      oneSignalListenersAttached = true;
+      oneSignal.Notifications.addEventListener("permissionChange", () => {
+        void refreshState();
+      });
+      oneSignal.User.PushSubscription.addEventListener("change", () => {
+        void refreshState();
+      });
+    };
+
+    const showRegistered = () => {
+      setStatus("通知は登録済みです。");
+      if (button) {
+        button.textContent = "通知は登録済みです";
+        button.disabled = true;
+      }
+    };
 
     const refreshState = async () => {
       if (!button) {
         return;
       }
+
+      button.disabled = true;
+      setStatus("通知の設定を確認しています。少しお待ちください。");
 
       const config = window.JOSENJI_ONESIGNAL_CONFIG;
       if (!config?.appId) {
@@ -150,19 +235,16 @@ import { withBasePath } from "../lib/urls";
 
       try {
         const oneSignal = await waitForOneSignal();
-        if (!oneSignal.Notifications.isPushSupported()) {
+        attachOneSignalListeners(oneSignal);
+        const state = await waitForSettledPushState(oneSignal);
+        if (!state.supported) {
           button.disabled = true;
           setStatus("このブラウザーでは通知を利用できません。");
           return;
         }
 
-        if (
-          oneSignal.Notifications.permission &&
-          oneSignal.User.PushSubscription.optedIn
-        ) {
-          setStatus("通知は登録済みです。");
-          button.textContent = "通知は登録済みです";
-          button.disabled = true;
+        if (state.permission && state.optedIn) {
+          showRegistered();
         } else {
           setStatus("通知はまだ登録されていません。");
           button.disabled = false;
@@ -187,6 +269,7 @@ import { withBasePath } from "../lib/urls";
 
       try {
         const oneSignal = await waitForOneSignal();
+        attachOneSignalListeners(oneSignal);
         if (!oneSignal.Notifications.isPushSupported()) {
           setStatus("このブラウザーでは通知を利用できません。");
           return;
@@ -196,8 +279,15 @@ import { withBasePath } from "../lib/urls";
 
         if (oneSignal.Notifications.permission) {
           await oneSignal.User.PushSubscription.optIn();
-          setStatus("通知を受け取る設定が完了しました。");
-          button.textContent = "通知は登録済みです";
+          const state = await waitForSettledPushState(oneSignal);
+          if (state.permission && state.optedIn) {
+            showRegistered();
+          } else {
+            setStatus(
+              "通知の許可は完了しました。登録状態を確認しています。少し待ってからもう一度開いてください。",
+            );
+            button.disabled = true;
+          }
         } else {
           setStatus(
             "通知は許可されませんでした。必要な場合はブラウザーの設定から変更できます。",
@@ -209,6 +299,18 @@ import { withBasePath } from "../lib/urls";
           "通知の設定に失敗しました。時間をおいてもう一度お試しください。",
         );
         button.disabled = false;
+      }
+    });
+
+    window.addEventListener("pageshow", () => {
+      void refreshState();
+    });
+    window.addEventListener("focus", () => {
+      void refreshState();
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        void refreshState();
       }
     });
 

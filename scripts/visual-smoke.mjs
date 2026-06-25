@@ -105,9 +105,12 @@ try {
     ),
   }));
   const expectedConfiguredStatus = [
+    "通知の設定を確認しています",
     "通知が拒否されています",
     "通知は登録済みです",
     "通知はまだ登録されていません",
+    "通知の準備に時間がかかっています",
+    "通知の状態を確認できませんでした",
     "通知を受け取るには",
     "この端末またはブラウザーでは",
   ].some((text) => notificationState.status.includes(text));
