@@ -252,8 +252,14 @@ async function validateDistIfPresent(allEntries) {
 
 async function validateHtmlSmoke(htmlFiles) {
   const css = await readFile(path.join(root, "src/styles/global.css"), "utf8");
-  if (!css.includes("min-width: 320px") || !css.includes("min-height: 44px")) {
-    fail("CSSに320px幅と44pxタップ領域の基本指定が見つかりません");
+  if (!css.includes("--content: min(100% - 32px, 1040px)")) {
+    fail("CSSに320px幅へ追随するコンテンツ幅指定が見つかりません");
+  }
+  if (/min-width:\s*320px/.test(css)) {
+    fail("CSSに320px幅で横スクロールの原因になる固定幅があります");
+  }
+  if (!css.includes("min-height: 44px")) {
+    fail("CSSに44pxタップ領域の基本指定が見つかりません");
   }
 
   for (const file of htmlFiles) {

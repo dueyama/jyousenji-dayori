@@ -9,7 +9,7 @@ export const siteConfig = {
   googleSitesUrl:
     import.meta.env.PUBLIC_GOOGLE_SITES_URL ?? `${googleSitesBaseUrl}/Home`,
   googleSitesAccessUrl: `${googleSitesBaseUrl}/access`,
-  historyUrl: `${googleSitesBaseUrl}/about/history`,
+  historyUrl: `${googleSitesBaseUrl}/history`,
   lineGuideUrl: `${googleSitesBaseUrl}/about/line`,
   lineUrl: import.meta.env.PUBLIC_LINE_URL || defaultLineUrl,
   address: import.meta.env.PUBLIC_TEMPLE_ADDRESS ?? "",

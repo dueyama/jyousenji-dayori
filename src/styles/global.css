@@ -32,7 +32,6 @@ html {
 }
 
 body {
-  min-width: 320px;
   margin: 0;
   background:
     linear-gradient(180deg, rgba(7, 84, 59, 0.08), transparent 240px),
@@ -257,6 +256,37 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.setup-hint {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 410px;
+  margin: 0;
+  border: 1px solid rgba(7, 84, 59, 0.16);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 9px 12px;
+  color: var(--color-muted);
+  font-size: 0.94rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.setup-hint .icon {
+  color: var(--color-primary);
+}
+
+.setup-hint span {
+  min-width: 0;
+}
+
+.setup-hint a {
+  color: var(--color-primary);
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 .hero__links {
@@ -563,7 +593,8 @@ main {
   object-fit: cover;
 }
 
-.line-callout {
+.line-callout,
+.official-callout {
   display: grid;
   gap: 18px;
   margin-top: 28px;
@@ -576,16 +607,19 @@ main {
   box-shadow: var(--shadow-row);
 }
 
-.line-callout h2 {
+.line-callout h2,
+.official-callout h2 {
   margin: 4px 0 6px;
 }
 
-.line-callout p {
+.line-callout p,
+.official-callout p {
   margin: 0;
   color: var(--color-muted);
 }
 
-.line-callout__eyebrow {
+.line-callout__eyebrow,
+.official-callout__eyebrow {
   color: var(--color-burgundy);
   font-size: 0.9rem;
   font-weight: 800;

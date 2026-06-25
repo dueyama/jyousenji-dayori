@@ -8,13 +8,13 @@ import templePhoto from "../assets/site/jyousenji-hondo.jpg";
 const accessLinks = [
   {
     href: siteConfig.googleSitesUrl,
-    label: "浄泉寺公式ページを開く",
-    description: "浄泉寺の基本情報や案内をご覧いただけます。",
+    label: "浄泉寺公式ページのトップへ",
+    description: "法座予定や基本情報を掲載している公式ページを開きます。",
   },
   {
     href: siteConfig.googleSitesAccessUrl,
     label: "アクセスを見る",
-    description: "住所、地図、交通案内は公式サイトで確認できます。",
+    description: "地図と交通案内は公式ページで確認できます。",
   },
   {
     href: siteConfig.historyUrl,
@@ -50,6 +50,36 @@ const accessLinks = [
         decoding="async"
       />
     </figure>
+
+    <section class="official-callout" aria-labelledby="official-title">
+      <div>
+        <span class="official-callout__eyebrow">浄泉寺公式ページ</span>
+        <h2 id="official-title">詳しい案内は公式ページへ</h2>
+        <p>
+          法座予定、アクセス、浄泉寺の歴史など、詳しい案内は既存の公式ページで確認できます。
+        </p>
+      </div>
+      <div class="action-row">
+        <a
+          class="button"
+          href={siteConfig.googleSitesUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          公式ページトップへ
+          <Icon name="external" />
+        </a>
+        <a
+          class="button button--secondary"
+          href={siteConfig.historyUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          歴史ページへ
+          <Icon name="external" />
+        </a>
+      </div>
+    </section>
 
     {
       siteConfig.lineUrl && (

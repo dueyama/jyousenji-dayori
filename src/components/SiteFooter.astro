@@ -4,7 +4,7 @@ import { siteConfig } from "../config/site";
 import { withBasePath } from "../lib/urls";
 
 const externalLinks = [
-  { href: siteConfig.googleSitesUrl, label: "公式ページ" },
+  { href: siteConfig.googleSitesUrl, label: "公式ページトップ" },
   { href: siteConfig.lineUrl, label: "公式LINE" },
   { href: siteConfig.mapUrl, label: "地図" },
 ].filter((link) => link.href);
@@ -14,8 +14,6 @@ const externalLinks = [
   <div class="site-footer__inner">
     <div>
       <p class="site-footer__name">{siteConfig.name}</p>
-      {siteConfig.address && <p>{siteConfig.address}</p>}
-      {siteConfig.phone && <p>電話: {siteConfig.phone}</p>}
     </div>
     <nav aria-label="補助メニュー">
       <a href={withBasePath("/about/")}>浄泉寺について</a>

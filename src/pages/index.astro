@@ -30,7 +30,7 @@ const helperLinks = [
   },
   {
     href: siteConfig.googleSitesUrl,
-    label: "浄泉寺公式ページ",
+    label: "公式ページトップ",
     external: true,
   },
   {
@@ -45,12 +45,11 @@ const helperLinks = [
   <section class="hero" aria-labelledby="home-title">
     <div class="hero__copy">
       <h1 id="home-title">浄泉寺からのお知らせ</h1>
-      <div class="action-row">
-        <a class="button" href={withBasePath("/notifications/")}>
-          <Icon name="bell" />
-          通知を受け取る
-        </a>
-      </div>
+      <p class="setup-hint">
+        <Icon name="info" />
+        <span>通知を受け取るには、まずホーム画面に追加します。</span>
+        <a href={withBasePath("/guide/")}>手順を見る</a>
+      </p>
       <nav class="hero__links" aria-label="補助リンク">
         {
           helperLinks.map((link) => (
