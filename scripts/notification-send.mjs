@@ -9,7 +9,7 @@ import {
   parseSegments,
 } from "./notification-message.mjs";
 
-const defaultSegments = ["Subscribed Users"];
+const defaultSegments = ["Total Subscriptions"];
 const sentLogPath = path.join("private", "notification-log.json");
 
 export async function runNotificationSend(argv = process.argv.slice(2)) {
@@ -184,6 +184,14 @@ export function sendOneSignalNotification(restApiKey, payload) {
             reject(
               new Error(
                 `OneSignal通知送信に失敗しました (${response.statusCode}): ${data.slice(0, 500)}`,
+              ),
+            );
+            return;
+          }
+          if (parsed.errors || !parsed.id) {
+            reject(
+              new Error(
+                `OneSignal通知送信に失敗しました: ${JSON.stringify(parsed).slice(0, 500)}`,
               ),
             );
             return;
