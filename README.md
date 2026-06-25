@@ -40,6 +40,13 @@ npm run build
 
 法座予定の時刻変換ルールとGoogle Calendar同期方針は `docs/GOOGLE_CALENDAR.md` を参照してください。法座予定で「午前」は10:00から12:00、「午後」は13:30から15:30として扱います。
 
+Google Calendarに反映する場合は、先に差分を確認します。
+
+```bash
+npm run calendar:preview
+npm run calendar:sync -- --apply
+```
+
 ## 手動通知プレビュー
 
 通知は送信しません。公開済み記事の通知文面だけを生成します。

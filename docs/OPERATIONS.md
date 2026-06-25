@@ -28,6 +28,20 @@ npm run build
 
 Google Calendar同期の方針と時刻変換ルールは `docs/GOOGLE_CALENDAR.md` を参照してください。
 
+Google Calendarに反映する場合は、必ず先に差分を確認します。
+
+```bash
+npm run calendar:preview
+npm run calendar:sync -- --apply
+```
+
+特定の行事だけ反映する場合:
+
+```bash
+npm run calendar:preview -- --id 2026-08-08-bon-houza
+npm run calendar:sync -- --apply --id 2026-08-08-bon-houza
+```
+
 ## 布教師名簿を参照・更新する
 
 布教師名簿は個人情報を含むため、公開リポジトリには置きません。実ファイルはリポジトリ外の私有フォルダ内に、このレポ用のサブフォルダを作って置き、ローカル `.env` の `JYOUSENJI_TEACHERS_FILE` で参照します。

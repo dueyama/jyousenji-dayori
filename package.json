@@ -15,6 +15,8 @@
     "test": "node --test tests/*.test.mjs",
     "test:visual": "node scripts/visual-smoke.mjs",
     "validate:content": "node scripts/validate-content.mjs",
+    "calendar:preview": "node scripts/calendar-sync.mjs",
+    "calendar:sync": "node scripts/calendar-sync.mjs",
     "generate:icons": "node scripts/generate-icons.mjs",
     "prebuild": "node scripts/generate-icons.mjs",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",

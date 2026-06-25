@@ -11,10 +11,13 @@
 Google Calendar APIのサービスアカウントJSONは、この公開リポジトリへ置きません。ローカル `.env` で、リポジトリ外の既存ファイルを参照します。
 
 ```env
-TEMPLEDB_GOOGLE_SERVICE_ACCOUNT_FILE=/path/to/service-account.json
+JYOUSENJI_GOOGLE_SERVICE_ACCOUNT_FILE=/path/to/service-account.json
+JYOUSENJI_GOOGLE_CALENDAR_ID=
 ```
 
 `.env` は `.gitignore` で除外します。JSON本体、APIキー、token、cookieはcommitしません。
+
+既存の `TEMPLEDB_GOOGLE_SERVICE_ACCOUNT_FILE` もフォールバックとして参照できますが、このリポジトリでは `JYOUSENJI_GOOGLE_SERVICE_ACCOUNT_FILE` を優先します。
 
 ## 法座予定の時刻変換ルール
 
@@ -63,12 +66,12 @@ allDay: false
 3. 午前/午後ルールで時刻を補完できるものだけ `draft: false` の候補にします。
 4. 時刻不明、講師未定、場所未確認の行事は `draft: true` のままにします。
 5. `npm run validate:content` と `npm run build` を実行します。
-6. Google Calendar同期を実装した後は、まず差分プレビューで作成・更新内容を確認します。
-7. 明示確認後にだけGoogle Calendarへ反映します。
+6. `npm run calendar:preview` でGoogle Calendarとの差分を確認します。
+7. 明示確認後にだけ `npm run calendar:sync -- --apply` でGoogle Calendarへ反映します。
 
-## 将来追加するコマンド案
+## 同期コマンド
 
-初期実装では、誤更新を防ぐためプレビューと実更新を分けます。
+誤更新を防ぐため、プレビューと実更新を分けています。
 
 ```bash
 npm run calendar:preview
@@ -78,6 +81,15 @@ npm run calendar:sync -- --apply
 `calendar:preview` はGoogle Calendarを変更せず、Markdownから作成・更新予定の差分だけを表示します。
 
 `calendar:sync -- --apply` は、差分確認後にだけ使用します。
+
+特定の行事だけ確認・同期する場合は `--id` を使います。
+
+```bash
+npm run calendar:preview -- --id 2026-08-08-bon-houza
+npm run calendar:sync -- --apply --id 2026-08-08-bon-houza
+```
+
+同期対象は `draft: false` の行事だけです。`draft: true` はGoogle Calendarへ作成・更新しません。
 
 GitHubへのcommit/push、Google Calendarへの実反映、OneSignal通知送信は、いずれも利用者の明示許可がある場合だけ行います。
 
