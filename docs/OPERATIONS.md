@@ -69,7 +69,7 @@ JYOUSENJI_TEACHERS_FILE=
 3. 明示的な許可がある場合のみcommit／pushします。
 4. GitHub Pages の配備成功を確認します。
 5. 公開URLで本文と画像を確認します。
-6. `npm run notification:preview -- <content-id>` で手動通知用の文面を生成します。
-7. OneSignal管理画面で人間が確認して送信します。
+6. `npm run notification:preview -- <content-id>` で通知用の文面を生成します。
+7. 利用者が明示した場合のみ `npm run notification:send -- <content-id> --apply` で送信します。
 
-コード、GitHub Actions、ローカルコマンドから通知を送信してはいけません。
+記事公開、commit、push、GitHub Pages配備を契機に自動で通知してはいけません。通知送信は明示指示時だけです。

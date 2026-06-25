@@ -8,6 +8,11 @@ import {
   diffCalendarEvent,
   parseArgs,
 } from "../scripts/calendar-sync.mjs";
+import {
+  buildOneSignalPayload,
+  parseSegments,
+} from "../scripts/notification-message.mjs";
+import { parseArgs as parseNotificationSendArgs } from "../scripts/notification-send.mjs";
 
 const root = process.cwd();
 
@@ -43,7 +48,7 @@ test("manifest has required PWA fields", async () => {
   assert.equal(manifest.scope, ".");
 });
 
-test("notification code does not contain REST sending", async () => {
+test("notification preview does not send through REST API", async () => {
   const preview = await readFile(
     path.join(root, "scripts/notification-preview.mjs"),
     "utf8",
@@ -66,6 +71,60 @@ test("notification code does not contain REST sending", async () => {
     updaterWorker,
     /cdn\.onesignal\.com\/sdks\/web\/v16\/OneSignalSDK\.sw\.js/,
   );
+});
+
+test("notification send builds OneSignal push payload", () => {
+  const payload = buildOneSignalPayload(
+    {
+      id: "2026-06-25-bon-houza-speakers",
+      collection: "notices",
+      title: "盆法座のご講師が決まりました",
+      body: "8月8日の盆法座では、木村智教氏、原田英真氏にご法話いただきます。",
+      url: "https://dueyama.github.io/jyousenji-dayori/notices/2026-06-25-bon-houza-speakers/",
+    },
+    {
+      appId: "777c076c-c65b-4695-8058-28e2476c85e9",
+      includedSegments: ["Subscribed Users"],
+    },
+  );
+
+  assert.equal(payload.app_id, "777c076c-c65b-4695-8058-28e2476c85e9");
+  assert.equal(payload.target_channel, "push");
+  assert.deepEqual(payload.included_segments, ["Subscribed Users"]);
+  assert.equal(payload.headings.ja, "盆法座のご講師が決まりました");
+  assert.equal(payload.contents.ja.includes("ご法話いただきます"), true);
+  assert.equal(payload.data.content_type, "notices");
+});
+
+test("notification send parser requires explicit apply for sending", () => {
+  assert.deepEqual(
+    parseNotificationSendArgs(["2026-06-25-bon-houza-speakers"]),
+    {
+      apply: false,
+      contentId: "2026-06-25-bon-houza-speakers",
+      force: false,
+      includedSegments: [],
+    },
+  );
+  assert.deepEqual(
+    parseNotificationSendArgs([
+      "2026-06-25-bon-houza-speakers",
+      "--apply",
+      "--segment",
+      "Subscribed Users",
+    ]),
+    {
+      apply: true,
+      contentId: "2026-06-25-bon-houza-speakers",
+      force: false,
+      includedSegments: ["Subscribed Users"],
+    },
+  );
+  assert.deepEqual(parseSegments("Subscribed Users, Test Users"), [
+    "Subscribed Users",
+    "Test Users",
+  ]);
+  assert.throws(() => parseNotificationSendArgs(["--apply"]), /content-id/);
 });
 
 test("calendar sync scripts are registered", async () => {

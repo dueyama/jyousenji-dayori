@@ -109,6 +109,7 @@ a {
 }
 
 .brand {
+  flex: 0 0 auto;
   min-height: 52px;
   display: inline-flex;
   align-items: center;
@@ -138,6 +139,7 @@ a {
   font-size: clamp(1.05rem, 3vw, 1.35rem);
   font-weight: 800;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .brand__text span {
@@ -148,6 +150,8 @@ a {
 
 .desktop-nav {
   display: none;
+  min-width: 0;
+  flex: 0 1 auto;
   align-items: center;
   gap: 4px;
 }
@@ -166,6 +170,7 @@ a {
   border-radius: var(--radius-sm);
   padding: 10px 12px;
   color: var(--color-navy);
+  white-space: nowrap;
 }
 
 .desktop-nav a:hover {
@@ -765,7 +770,7 @@ main {
   font-weight: 700;
 }
 
-@media (min-width: 760px) {
+@media (min-width: 980px) {
   .desktop-nav {
     display: flex;
   }

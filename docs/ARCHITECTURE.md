@@ -11,7 +11,7 @@ GitHub Actions
   ↓
 GitHub Pages
   ↓
-OneSignal Web Push（購読管理・手動通知配信）
+OneSignal Web Push（購読管理・明示指示時のみ通知配信）
 ```
 
 ## コンテンツ
@@ -33,3 +33,4 @@ OneSignal Web Push（購読管理・手動通知配信）
 ## 通知
 
 OneSignal App ID が設定されている場合だけSDKを読み込みます。通知の許可要求は利用者のボタン操作後に限定します。通知送信は実装していません。
+通知送信は公開サイトやGitHub Actionsからは行わず、Codexが明示指示を受けた場合だけローカルの `notification:send` コマンドからOneSignal REST APIへ送信します。

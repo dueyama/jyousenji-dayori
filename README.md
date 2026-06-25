@@ -47,14 +47,20 @@ npm run calendar:preview
 npm run calendar:sync -- --apply
 ```
 
-## 手動通知プレビュー
+## 通知プレビュー・送信
 
-通知は送信しません。公開済み記事の通知文面だけを生成します。
+公開済み記事の通知文面を生成します。
 
 ```bash
 npm run notification:preview -- <content-id>
 ```
 
-OneSignal管理画面で人間が内容と対象を確認して送信します。
+Codexが明示指示を受けた場合だけ、ローカル `.env` のOneSignal REST API Keyを使って送信します。
+
+```bash
+npm run notification:send -- <content-id> --apply
+```
+
+サイト公開、commit、push、GitHub Pages配備だけでは通知しません。
 
 詳細は `docs/SETUP.md`、`docs/OPERATIONS.md`、`docs/ONESIGNAL.md`、`docs/GOOGLE_CALENDAR.md` を参照してください。

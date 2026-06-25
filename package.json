@@ -21,7 +21,8 @@
     "prebuild": "node scripts/generate-icons.mjs",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
-    "notification:preview": "node scripts/notification-preview.mjs"
+    "notification:preview": "node scripts/notification-preview.mjs",
+    "notification:send": "node scripts/notification-send.mjs"
   },
   "dependencies": {
     "astro": "^6.4.8"

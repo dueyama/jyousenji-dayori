@@ -39,6 +39,51 @@ try {
     }
   }
 
+  await page.setViewportSize({ width: 788, height: 900 });
+  await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
+  await page.screenshot({
+    path: path.join(screenshotDir, "home-medium-788.png"),
+    fullPage: true,
+  });
+  await assertPageState(page, "medium home 788");
+  const mediumNavState = await page.evaluate(() => ({
+    desktopNavVisible:
+      getComputedStyle(document.querySelector(".desktop-nav")).display !==
+      "none",
+    bottomNavVisible:
+      getComputedStyle(document.querySelector(".bottom-nav")).display !==
+      "none",
+    brandLines:
+      document.querySelector(".brand__text")?.getClientRects().length ?? 0,
+  }));
+  if (mediumNavState.desktopNavVisible) {
+    failures.push("medium home 788: desktop nav should stay hidden");
+  }
+  if (!mediumNavState.bottomNavVisible) {
+    failures.push("medium home 788: bottom nav should stay visible");
+  }
+  if (mediumNavState.brandLines > 2) {
+    failures.push("medium home 788: brand text is wrapping unexpectedly");
+  }
+
+  const mediumEventsLink = page.locator('.bottom-nav a[href="/events/"]');
+  const mediumEventsLinkCount = await mediumEventsLink.count();
+  if (mediumEventsLinkCount !== 1) {
+    failures.push(
+      `medium home 788: expected one bottom events link, found ${mediumEventsLinkCount}`,
+    );
+  } else {
+    await mediumEventsLink.click();
+    await page.waitForURL(`${baseUrl}/events/`, { waitUntil: "networkidle" });
+    const eventsHeading = await page.locator("main h1").textContent();
+    if (!eventsHeading?.includes("行事予定")) {
+      failures.push(
+        `medium home 788: bottom events link opened "${eventsHeading}"`,
+      );
+    }
+    await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
+  }
+
   await page.setViewportSize({ width: 320, height: 700 });
   await page.goto(`${baseUrl}/notifications/`, { waitUntil: "networkidle" });
   await page.screenshot({
@@ -59,19 +104,32 @@ try {
       script.src.includes("onesignal"),
     ),
   }));
-  if (!notificationState.status.includes("通知機能は準備中")) {
+  const expectedConfiguredStatus = [
+    "通知が拒否されています",
+    "通知は登録済みです",
+    "通知はまだ登録されていません",
+    "通知を受け取るには",
+    "この端末またはブラウザーでは",
+  ].some((text) => notificationState.status.includes(text));
+  if (
+    !notificationState.hasOneSignalScript &&
+    !notificationState.status.includes("通知機能は準備中")
+  ) {
     failures.push(
       `notifications: unexpected status "${notificationState.status}"`,
     );
   }
-  if (notificationState.disabled !== true) {
+  if (notificationState.hasOneSignalScript && !expectedConfiguredStatus) {
     failures.push(
-      "notifications: button should be disabled when OneSignal App ID is unset",
+      `notifications: unexpected configured status "${notificationState.status}"`,
     );
   }
-  if (notificationState.hasOneSignalScript) {
+  if (
+    !notificationState.hasOneSignalScript &&
+    notificationState.disabled !== true
+  ) {
     failures.push(
-      "notifications: OneSignal SDK script should not load without App ID",
+      "notifications: button should be disabled when OneSignal App ID is unset",
     );
   }
 

@@ -5,12 +5,18 @@ const root = process.cwd();
 const errors = [];
 
 const textFiles = await listTextFiles(root, {
-  skipDirs: new Set(["node_modules", "dist", ".astro", ".git"]),
+  skipDirs: new Set(["node_modules", "dist", ".astro", ".git", "private"]),
 });
 
 for (const file of textFiles) {
   const relative = path.relative(root, file);
   const content = await readFile(file, "utf8");
+  const oneSignalSendAllowed =
+    relative === "scripts/notification-send.mjs" ||
+    relative === ".env.example" ||
+    relative.startsWith("docs/") ||
+    relative === "AGENTS.md" ||
+    relative === "README.md";
 
   if (
     relative.startsWith(".github/workflows/") &&
@@ -19,17 +25,23 @@ for (const file of textFiles) {
     errors.push(`${relative}: pull_request_target は使わないでください`);
   }
 
-  if (/api\.onesignal\.com\/notifications/i.test(content)) {
+  if (
+    !oneSignalSendAllowed &&
+    /api\.onesignal\.com\/notifications/i.test(content)
+  ) {
     errors.push(
-      `${relative}: OneSignal REST API 送信エンドポイントを含めないでください`,
+      `${relative}: OneSignal REST API送信は scripts/notification-send.mjs に集約してください`,
     );
   }
 
   if (
+    !oneSignalSendAllowed &&
     relative !== "scripts/lint.mjs" &&
     /ONESIGNAL_REST_API_KEY|APP_API_KEY|authorization:\s*Key/i.test(content)
   ) {
-    errors.push(`${relative}: OneSignal送信用キーを扱わないでください`);
+    errors.push(
+      `${relative}: OneSignal送信用キーを扱うコードを追加しないでください`,
+    );
   }
 
   if (
