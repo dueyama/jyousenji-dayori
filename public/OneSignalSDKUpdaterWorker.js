@@ -1,5 +1,3 @@
-importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
-
 async function setJyousenjiAppBadge() {
   if (!("setAppBadge" in navigator)) {
     return;
@@ -29,3 +27,5 @@ self.addEventListener("push", (event) => {
 self.addEventListener("notificationclick", (event) => {
   event.waitUntil(clearJyousenjiAppBadge());
 });
+
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");

@@ -155,6 +155,11 @@ try {
       "OneSignalSDKWorker.js does not reference Web SDK v16 worker",
     );
   }
+  if (workerBody.indexOf("setAppBadge") > workerBody.indexOf("importScripts")) {
+    failures.push(
+      "OneSignalSDKWorker.js should register badging before importing OneSignal",
+    );
+  }
 
   const updaterWorkerResponse = await page.goto(
     `${baseUrl}/OneSignalSDKUpdaterWorker.js`,
@@ -168,6 +173,14 @@ try {
   if (!updaterWorkerBody.includes("web/v16/OneSignalSDK.sw.js")) {
     failures.push(
       "OneSignalSDKUpdaterWorker.js does not reference Web SDK v16 worker",
+    );
+  }
+  if (
+    updaterWorkerBody.indexOf("setAppBadge") >
+    updaterWorkerBody.indexOf("importScripts")
+  ) {
+    failures.push(
+      "OneSignalSDKUpdaterWorker.js should register badging before importing OneSignal",
     );
   }
 } finally {
