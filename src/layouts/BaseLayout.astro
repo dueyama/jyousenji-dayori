@@ -80,6 +80,28 @@ const serviceWorkerScope = basePath;
         serviceWorkerScope,
       };
 
+      async function clearJyousenjiAppBadge() {
+        if (!("clearAppBadge" in navigator)) {
+          return;
+        }
+        try {
+          await navigator.clearAppBadge();
+        } catch {
+          // Badging is optional and may be disabled by the user or browser.
+        }
+      }
+
+      if (document.visibilityState === "visible") {
+        clearJyousenjiAppBadge();
+      }
+      window.addEventListener("pageshow", clearJyousenjiAppBadge);
+      window.addEventListener("focus", clearJyousenjiAppBadge);
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          clearJyousenjiAppBadge();
+        }
+      });
+
       if (oneSignalAppId) {
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         window.OneSignalDeferred.push(async function (OneSignal) {
