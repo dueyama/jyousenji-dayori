@@ -90,6 +90,7 @@ for (const entry of entries) {
       `${entry.collection}/${entry.slug}: Markdown内のraw HTMLまたはscriptは使わないでください`,
     );
   }
+  validateMarkdownLinks(entry);
 
   if (entry.collection === "notices") {
     requireString(entry, "category");
@@ -119,6 +120,18 @@ for (const entry of entries) {
     ) {
       fail(
         `${entry.collection}/${entry.slug}: endAt は startAt 以後にしてください`,
+      );
+    }
+  }
+}
+
+function validateMarkdownLinks(entry) {
+  const markdownLinkPattern = /!?\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+  for (const match of entry.body.matchAll(markdownLinkPattern)) {
+    const url = match[1];
+    if (url.startsWith("/") && !url.startsWith("//")) {
+      fail(
+        `${entry.collection}/${entry.slug}: Markdown本文のリンクはGitHub Pagesで壊れない相対パスにしてください (${url})`,
       );
     }
   }
