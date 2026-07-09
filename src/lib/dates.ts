@@ -1,11 +1,18 @@
 const dateTimeFormatter = new Intl.DateTimeFormat("ja-JP", {
-  dateStyle: "long",
-  timeStyle: "short",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  weekday: "short",
+  hour: "numeric",
+  minute: "2-digit",
   timeZone: "Asia/Tokyo",
 });
 
 const dateFormatter = new Intl.DateTimeFormat("ja-JP", {
-  dateStyle: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  weekday: "short",
   timeZone: "Asia/Tokyo",
 });
 
