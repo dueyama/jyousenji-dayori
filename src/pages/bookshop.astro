@@ -114,18 +114,32 @@ const eventUrl = withBasePath("/events/2026-08-08-bon-houza/");
                   <span class="bookshop-genre">{book.genre}</span>
                 </td>
                 <td class="bookshop-book-cell" data-label="本・著者">
-                  {book.newArrival && (
-                    <span class="bookshop-new-label">新しく入りました</span>
-                  )}
-                  <a
-                    href={book.productUrl}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    <strong>{book.title}</strong>
-                    <Icon name="external" />
-                  </a>
-                  <small>{book.authors}</small>
+                  <div class="bookshop-book">
+                    <span class="bookshop-cover" aria-hidden="true">
+                      <Image
+                        src={book.coverImage}
+                        alt=""
+                        widths={[72, 108]}
+                        sizes="(max-width: 720px) 64px, 60px"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </span>
+                    <span class="bookshop-book__details">
+                      {book.newArrival && (
+                        <span class="bookshop-new-label">新しく入りました</span>
+                      )}
+                      <a
+                        href={book.productUrl}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <strong>{book.title}</strong>
+                        <Icon name="external" />
+                      </a>
+                      <small>{book.authors}</small>
+                    </span>
+                  </div>
                 </td>
                 <td data-label="出版社">
                   <span>{book.publisher}</span>
@@ -151,6 +165,7 @@ const eventUrl = withBasePath("/events/2026-08-08-bon-houza/");
 
     <p class="bookshop-stock-note">
       在庫冊数は2026年7月17日時点です。本の数には限りがあり、当日の状況により変更になる場合があります。
+      表紙画像と書誌情報は、各書籍の商品案内を参照しています。
     </p>
   </section>
 </BaseLayout>

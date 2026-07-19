@@ -35,7 +35,7 @@ npm run build
 - お知らせ: `src/content/notices/`
 - 行事: `src/content/events/`
 - 法座の本屋: `src/data/bookshop.ts`
-- 公開画像: `src/assets/notices/` または `src/assets/events/`
+- 公開画像: `src/assets/notices/`、`src/assets/events/`、`src/assets/books/`
 
 サンプル記事はすべて `draft: true` です。公開する記事は日時、場所、写真の掲載許可、代替テキストを確認してから `draft: false` にしてください。
 

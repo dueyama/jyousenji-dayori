@@ -188,19 +188,26 @@ a {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid var(--color-border);
   background: rgba(255, 255, 255, 0.97);
+  padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
   box-shadow: 0 -8px 24px rgba(16, 33, 63, 0.08);
   backdrop-filter: blur(12px);
 }
 
 .bottom-nav a {
   min-width: 0;
-  min-height: 64px;
+  min-height: 68px;
   justify-content: center;
   flex-direction: column;
-  gap: 2px;
-  padding: 8px 4px 10px;
+  gap: 4px;
+  padding: 9px 4px 8px;
   color: var(--color-primary);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
+  touch-action: manipulation;
+}
+
+.bottom-nav .icon {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .icon {
@@ -217,7 +224,7 @@ a {
 main {
   width: var(--content);
   margin: 0 auto;
-  padding: 32px 0 96px;
+  padding: 32px 0 calc(108px + env(safe-area-inset-bottom, 0px));
 }
 
 .hero {
@@ -945,8 +952,41 @@ main {
   font-weight: 800;
 }
 
+.bookshop-book {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.bookshop-cover {
+  display: flex;
+  width: 60px;
+  min-height: 84px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dedbd1;
+  background: #fff;
+  padding: 3px;
+}
+
+.bookshop-cover img {
+  display: block;
+  width: 100%;
+  height: 78px;
+  object-fit: contain;
+}
+
+.bookshop-book__details {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
 .bookshop-book-cell a {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: 100%;
   align-items: flex-start;
   gap: 4px;
   color: var(--color-primary);
@@ -1111,14 +1151,17 @@ main {
     box-shadow: var(--shadow-row);
   }
 
-  .bookshop-table td,
-  .bookshop-table tbody tr:nth-child(even) td {
+  .bookshop-table td {
     display: grid;
     grid-template-columns: minmax(76px, 0.8fr) minmax(0, 2fr);
     gap: 10px;
     border-bottom: 1px solid #e8e4da;
     background: transparent;
     padding: 10px 0;
+  }
+
+  .bookshop-table tbody tr:nth-child(even) td {
+    background: transparent;
   }
 
   .bookshop-table td:last-child {
@@ -1136,6 +1179,32 @@ main {
 
   .bookshop-table td > * {
     grid-column: 2;
+  }
+
+  .bookshop-table td.bookshop-book-cell {
+    display: block;
+  }
+
+  .bookshop-table td.bookshop-book-cell::before {
+    display: none;
+  }
+
+  .bookshop-table td.bookshop-book-cell > * {
+    grid-column: auto;
+  }
+
+  .bookshop-book {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .bookshop-cover {
+    width: 64px;
+    min-height: 92px;
+  }
+
+  .bookshop-cover img {
+    height: 86px;
   }
 
   .bookshop-genre {
@@ -1176,7 +1245,7 @@ main {
   margin: 0 auto;
   display: grid;
   gap: 18px;
-  padding: 30px 0 110px;
+  padding: 30px 0 calc(118px + env(safe-area-inset-bottom, 0px));
 }
 
 .site-footer__name {

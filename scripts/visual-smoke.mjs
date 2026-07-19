@@ -213,12 +213,37 @@ if (failures.length > 0) {
 console.log(`Visual smoke passed. Screenshots: ${screenshotDir}`);
 
 async function assertPageState(page, label) {
-  const state = await page.evaluate(() => ({
-    h1: document.querySelector("h1")?.textContent?.trim() ?? "",
-    overflow: document.documentElement.scrollWidth > window.innerWidth,
-    hasMain: Boolean(document.querySelector("main")),
-    hasSkipLink: Boolean(document.querySelector(".skip-link")),
-  }));
+  const state = await page.evaluate(() => {
+    const bottomNav = document.querySelector(".bottom-nav");
+    const bottomNavStyle = bottomNav ? getComputedStyle(bottomNav) : null;
+    const bottomNavLinks = bottomNav
+      ? [...bottomNav.querySelectorAll("a")]
+      : [];
+    const bottomNavVisible = bottomNavStyle?.display !== "none";
+
+    return {
+      h1: document.querySelector("h1")?.textContent?.trim() ?? "",
+      overflow: document.documentElement.scrollWidth > window.innerWidth,
+      hasMain: Boolean(document.querySelector("main")),
+      hasSkipLink: Boolean(document.querySelector(".skip-link")),
+      viewportMeta:
+        document
+          .querySelector('meta[name="viewport"]')
+          ?.getAttribute("content") ?? "",
+      bottomNavVisible,
+      bottomNavPaddingBottom: bottomNavStyle
+        ? Number.parseFloat(bottomNavStyle.paddingBottom)
+        : 0,
+      bottomNavLinkHeight:
+        bottomNavLinks.length > 0
+          ? Math.min(
+              ...bottomNavLinks.map(
+                (link) => link.getBoundingClientRect().height,
+              ),
+            )
+          : 0,
+    };
+  });
 
   if (!state.h1) {
     failures.push(`${label}: h1 is missing`);
@@ -232,14 +257,35 @@ async function assertPageState(page, label) {
   if (!state.hasSkipLink) {
     failures.push(`${label}: skip link is missing`);
   }
+  if (!state.viewportMeta.includes("viewport-fit=cover")) {
+    failures.push(`${label}: viewport-fit=cover is missing`);
+  }
+  if (state.bottomNavVisible && state.bottomNavPaddingBottom < 8) {
+    failures.push(`${label}: bottom navigation safe padding is too small`);
+  }
+  if (state.bottomNavVisible && state.bottomNavLinkHeight < 68) {
+    failures.push(`${label}: bottom navigation tap targets are too short`);
+  }
 }
 
 async function assertBookshopState(page, label) {
   await assertPageState(page, label);
+  const coverImages = page.locator(".bookshop-cover img");
+  const coverCount = await coverImages.count();
+  for (let index = 0; index < coverCount; index += 1) {
+    await coverImages.nth(index).scrollIntoViewIfNeeded();
+  }
+  await page.waitForLoadState("networkidle");
+
   const state = await page.evaluate(() => {
     const heroImage = document.querySelector(".bookshop-hero img");
+    const covers = [...document.querySelectorAll(".bookshop-cover img")];
     return {
       rows: document.querySelectorAll(".bookshop-table tbody tr").length,
+      covers: covers.length,
+      coversLoaded: covers.every(
+        (cover) => cover instanceof HTMLImageElement && cover.naturalWidth > 0,
+      ),
       newLabels: document.querySelectorAll(".bookshop-new-label").length,
       stockTotal: [
         ...document.querySelectorAll(".bookshop-stock strong"),
@@ -262,6 +308,12 @@ async function assertBookshopState(page, label) {
 
   if (state.rows !== 18) {
     failures.push(`${label}: expected 18 books, found ${state.rows}`);
+  }
+  if (state.covers !== 18) {
+    failures.push(`${label}: expected 18 cover images, found ${state.covers}`);
+  }
+  if (!state.coversLoaded) {
+    failures.push(`${label}: one or more cover images did not load`);
   }
   if (state.newLabels !== 3) {
     failures.push(
