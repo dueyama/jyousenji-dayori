@@ -14,6 +14,7 @@ export const GET: APIRoute = async ({ site }) => {
     "/",
     "/notices/",
     "/events/",
+    "/bookshop/",
     "/notifications/",
     "/guide/",
     "/about/",

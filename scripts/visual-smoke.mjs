@@ -84,6 +84,24 @@ try {
     await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
   }
 
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseUrl}/bookshop/`, { waitUntil: "networkidle" });
+  await page.screenshot({
+    path: path.join(screenshotDir, "bookshop-desktop.png"),
+    fullPage: true,
+  });
+  await assertBookshopState(page, "bookshop desktop");
+
+  for (const width of [390, 320]) {
+    await page.setViewportSize({ width, height: width === 320 ? 700 : 844 });
+    await page.goto(`${baseUrl}/bookshop/`, { waitUntil: "networkidle" });
+    await page.screenshot({
+      path: path.join(screenshotDir, `bookshop-mobile-${width}.png`),
+      fullPage: true,
+    });
+    await assertBookshopState(page, `bookshop mobile ${width}`);
+  }
+
   await page.setViewportSize({ width: 320, height: 700 });
   await page.goto(`${baseUrl}/notifications/`, { waitUntil: "networkidle" });
   await page.screenshot({
@@ -213,5 +231,52 @@ async function assertPageState(page, label) {
   }
   if (!state.hasSkipLink) {
     failures.push(`${label}: skip link is missing`);
+  }
+}
+
+async function assertBookshopState(page, label) {
+  await assertPageState(page, label);
+  const state = await page.evaluate(() => {
+    const heroImage = document.querySelector(".bookshop-hero img");
+    return {
+      rows: document.querySelectorAll(".bookshop-table tbody tr").length,
+      newLabels: document.querySelectorAll(".bookshop-new-label").length,
+      stockTotal: [
+        ...document.querySelectorAll(".bookshop-stock strong"),
+      ].reduce(
+        (total, element) =>
+          total + Number.parseInt(element.textContent?.trim() ?? "0", 10),
+        0,
+      ),
+      hasSpecialPriceExample:
+        document
+          .querySelector(".bookshop-price-note")
+          ?.textContent?.includes("1,984円") === true &&
+        document
+          .querySelector(".bookshop-price-note")
+          ?.textContent?.includes("1,900円") === true,
+      heroLoaded:
+        heroImage instanceof HTMLImageElement && heroImage.naturalWidth > 0,
+    };
+  });
+
+  if (state.rows !== 18) {
+    failures.push(`${label}: expected 18 books, found ${state.rows}`);
+  }
+  if (state.newLabels !== 3) {
+    failures.push(
+      `${label}: expected 3 new-arrival labels, found ${state.newLabels}`,
+    );
+  }
+  if (state.stockTotal !== 31) {
+    failures.push(
+      `${label}: expected stock total 31, found ${state.stockTotal}`,
+    );
+  }
+  if (!state.hasSpecialPriceExample) {
+    failures.push(`${label}: special-price explanation is missing`);
+  }
+  if (!state.heroLoaded) {
+    failures.push(`${label}: hero image did not load`);
   }
 }
