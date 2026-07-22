@@ -10,6 +10,7 @@ export const siteConfig = {
     import.meta.env.PUBLIC_GOOGLE_SITES_URL ?? `${googleSitesBaseUrl}/Home`,
   googleSitesAccessUrl: `${googleSitesBaseUrl}/access`,
   historyUrl: `${googleSitesBaseUrl}/history`,
+  songVideoUrl: "https://youtu.be/gu21CPj7Mdg",
   lineGuideUrl: `${googleSitesBaseUrl}/about/line`,
   lineUrl: import.meta.env.PUBLIC_LINE_URL || defaultLineUrl,
   address: import.meta.env.PUBLIC_TEMPLE_ADDRESS ?? "",

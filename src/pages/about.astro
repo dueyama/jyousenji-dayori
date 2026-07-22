@@ -4,6 +4,7 @@ import Icon from "../components/Icon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { siteConfig } from "../config/site";
 import templePhoto from "../assets/site/jyousenji-hondo.jpg";
+import songThumbnail from "../assets/site/jyousenji-song.jpg";
 
 const accessLinks = [
   {
@@ -120,6 +121,48 @@ const accessLinks = [
       <p>
         公式サイトの歴史ページでは、永正の末（1520）に日置庄実広の地へお堂を創建したことを始まりとし、寛永11年（1634）に「浄泉寺」の寺号を受け、元禄14年（1701）に現在の新別名村鯉原山へ移ったと伝えられています。
       </p>
+    </section>
+
+    <section
+      class="song-feature"
+      id="jyousenji-song"
+      aria-labelledby="song-title"
+    >
+      <a
+        class="song-feature__media"
+        href={siteConfig.songVideoUrl}
+        rel="noopener noreferrer"
+        target="_blank"
+        aria-label="YouTubeで浄泉寺の歌を聴く"
+      >
+        <Image
+          src={songThumbnail}
+          alt="浄泉寺の歌の動画サムネイル"
+          widths={[480, 720]}
+          sizes="(min-width: 720px) 380px, calc(100vw - 32px)"
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="song-feature__play" aria-hidden="true">
+          <Icon name="play" />
+        </span>
+      </a>
+      <div class="song-feature__copy">
+        <span class="song-feature__eyebrow">映像で聴く</span>
+        <h2 id="song-title">浄泉寺の歌</h2>
+        <p>浄泉寺の歌を、YouTubeでお聴きいただけます。</p>
+        <div class="action-row">
+          <a
+            class="button"
+            href={siteConfig.songVideoUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            YouTubeで聴く
+            <Icon name="external" />
+          </a>
+        </div>
+      </div>
     </section>
 
     {
