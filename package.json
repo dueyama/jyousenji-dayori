@@ -18,6 +18,7 @@
     "calendar:preview": "node scripts/calendar-sync.mjs",
     "calendar:sync": "node scripts/calendar-sync.mjs",
     "generate:icons": "node scripts/generate-icons.mjs",
+    "generate:bookshop-sign": "node scripts/generate-bookshop-sign-cli.mjs",
     "prebuild": "node scripts/generate-icons.mjs",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
