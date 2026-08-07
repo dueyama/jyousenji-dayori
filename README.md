@@ -34,7 +34,7 @@ npm run build
 
 - お知らせ: `src/content/notices/`
 - 行事: `src/content/events/`
-- 法座の本屋: `src/data/bookshop.ts`
+- お寺本や: `src/data/bookshop.ts`
 - 公開画像: `src/assets/notices/`、`src/assets/events/`、`src/assets/books/`
 
 サンプル記事はすべて `draft: true` です。公開する記事は日時、場所、写真の掲載許可、代替テキストを確認してから `draft: false` にしてください。
@@ -48,7 +48,7 @@ npm run calendar:preview
 npm run calendar:sync -- --apply
 ```
 
-法座の本屋ページでは、公開用の書名・著者・出版社・税込価格・紹介文・商品ページURL・現在庫冊数を管理します。入荷数、販売数、仕入価格などの内部情報は公開データへ含めません。特別販売価格は、税込価格の10円・1円の位を切り下げた100円単位で表示します。
+お寺本やページでは、公開用の書名・著者・出版社・税込価格・紹介文・商品ページURL・現在庫冊数を管理します。入荷数、販売数、仕入価格などの内部情報は公開データへ含めません。特別販売価格は、税込価格の10円・1円の位を切り下げた100円単位で表示します。
 
 ## 通知プレビュー・送信
 

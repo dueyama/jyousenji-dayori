@@ -42,7 +42,7 @@ npm run calendar:preview -- --id 2026-08-08-bon-houza
 npm run calendar:sync -- --apply --id 2026-08-08-bon-houza
 ```
 
-## 法座の本屋を更新する
+## お寺本やを更新する
 
 1. 公開する本の情報は `src/data/bookshop.ts` で管理します。
 2. 書名、著者、出版社、税込価格、短い紹介、出版社の商品ページURLを確認します。

@@ -79,7 +79,7 @@ test("notification send builds OneSignal push payload", () => {
       id: "2026-06-25-bon-houza-speakers",
       collection: "notices",
       title: "盆法座のご講師が決まりました",
-      body: "8月8日の盆法座では、木村智教氏、原田英真氏にご法話いただきます。",
+      body: "8月8日の盆法座では、木村智教 師、原田英真 師にご法話いただきます。",
       url: "https://dueyama.github.io/jyousenji-dayori/notices/2026-06-25-bon-houza-speakers/",
     },
     {
@@ -94,6 +94,46 @@ test("notification send builds OneSignal push payload", () => {
   assert.equal(payload.headings.ja, "盆法座のご講師が決まりました");
   assert.equal(payload.contents.ja.includes("ご法話いただきます"), true);
   assert.equal(payload.data.content_type, "notices");
+});
+
+test("houza speaker names use the temple honorific 師", async () => {
+  const contentPaths = [
+    "src/content/events/2026-08-08-bon-houza.md",
+    "src/content/notices/2026-06-25-bon-houza-speakers.md",
+  ];
+
+  for (const contentPath of contentPaths) {
+    const content = await readFile(path.join(root, contentPath), "utf8");
+    assert.match(content, /木村智教 師/);
+    assert.match(content, /原田英真 師/);
+    assert.doesNotMatch(content, /(?:木村智教|原田英真)\s*氏/);
+  }
+});
+
+test("bookshop public name is お寺本や", async () => {
+  const publicNameFiles = [
+    "src/pages/index.astro",
+    "src/pages/bookshop.astro",
+    "src/components/SiteFooter.astro",
+    "src/content/events/2026-08-08-bon-houza.md",
+    "src/content/notices/2026-06-25-bon-houza-speakers.md",
+    "src/content/notices/2026-07-19-bon-houza-bookshop.md",
+  ];
+  const obsoleteNames = ["法座" + "の本屋", "お寺" + "本屋"];
+
+  for (const publicNameFile of publicNameFiles) {
+    const content = await readFile(path.join(root, publicNameFile), "utf8");
+    for (const obsoleteName of obsoleteNames) {
+      assert.equal(content.includes(obsoleteName), false);
+    }
+  }
+
+  const bookshopPage = await readFile(
+    path.join(root, "src/pages/bookshop.astro"),
+    "utf8",
+  );
+  assert.match(bookshopPage, /title="お寺本や"/);
+  assert.match(bookshopPage, />お寺本や<\/h1>/);
 });
 
 test("notification send parser requires explicit apply for sending", () => {
