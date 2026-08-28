@@ -1045,6 +1045,15 @@ main {
   object-fit: contain;
 }
 
+.bookshop-cover--placeholder {
+  background: var(--color-paper);
+  color: var(--color-muted);
+  font-size: 0.69rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+}
+
 .bookshop-book__details {
   display: block;
   width: 100%;
@@ -1065,6 +1074,12 @@ main {
   width: 1em;
   height: 1em;
   margin-top: 0.22em;
+}
+
+.bookshop-book__details > strong {
+  display: block;
+  color: var(--color-navy);
+  line-height: 1.45;
 }
 
 .bookshop-book-cell small,
@@ -1109,6 +1124,53 @@ main {
   padding: 12px 14px;
   color: #5f4b1a;
   font-size: 0.92rem;
+}
+
+.bookshop-archive {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.38fr) minmax(0, 1fr);
+  gap: 28px;
+  border-top: 1px solid rgba(7, 84, 59, 0.18);
+  padding-top: 24px;
+}
+
+.bookshop-archive h2 {
+  margin: 3px 0 0;
+  color: var(--color-navy);
+  font-size: 1.35rem;
+}
+
+.bookshop-archive ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bookshop-archive a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  padding: 10px 14px;
+  color: var(--color-navy);
+  font-weight: 800;
+}
+
+.bookshop-archive a[aria-current="page"] {
+  background: var(--color-paper);
+}
+
+.bookshop-archive time {
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 @media (max-width: 720px) {
@@ -1290,6 +1352,15 @@ main {
 
   .bookshop-new-label {
     margin-bottom: 0;
+  }
+
+  .bookshop-archive {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .bookshop-archive a {
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 }
 

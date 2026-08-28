@@ -7,12 +7,33 @@ import { sortByNewest } from "../../lib/dates";
 const notices = sortByNewest(
   await getCollection("notices", ({ data }) => !data.draft),
 );
+const currentNotices = notices.filter((notice) => !notice.data.archived);
+const archivedNotices = notices.filter((notice) => notice.data.archived);
 ---
 
 <BaseLayout title="お知らせ" canonicalPath="/notices/">
   <section class="page-title">
     <h1>お知らせ</h1>
-    <p>公開中のお知らせを新しい順に掲載します。</p>
+    <p>現在のお知らせと、終了した行事に関する過去のお知らせを掲載します。</p>
   </section>
-  <NoticeList notices={notices} />
+
+  <section class="section" aria-labelledby="current-notices">
+    <div class="section__header">
+      <h2 id="current-notices">現在のお知らせ</h2>
+    </div>
+    <NoticeList
+      notices={currentNotices}
+      emptyText="現在のお知らせはありません。"
+    />
+  </section>
+
+  <section class="section" aria-labelledby="archived-notices">
+    <div class="section__header">
+      <h2 id="archived-notices">過去のお知らせ</h2>
+    </div>
+    <NoticeList
+      notices={archivedNotices}
+      emptyText="過去のお知らせはまだありません。"
+    />
+  </section>
 </BaseLayout>

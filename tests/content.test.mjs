@@ -38,6 +38,29 @@ test("notification preview rejects draft entries", () => {
   assert.match(result.stderr, /draft: true/);
 });
 
+test("archived notices leave the home page and remain in the notice log", async () => {
+  const homePage = await readFile(
+    path.join(root, "src/pages/index.astro"),
+    "utf8",
+  );
+  const noticeIndex = await readFile(
+    path.join(root, "src/pages/notices/index.astro"),
+    "utf8",
+  );
+  const archivedNoticePaths = [
+    "src/content/notices/2026-06-25-bon-houza-speakers.md",
+    "src/content/notices/2026-07-19-bon-houza-bookshop.md",
+  ];
+
+  assert.match(homePage, /!data\.draft && !data\.archived/);
+  assert.match(noticeIndex, /過去のお知らせ/);
+  assert.match(noticeIndex, /notice\.data\.archived/);
+  for (const archivedNoticePath of archivedNoticePaths) {
+    const content = await readFile(path.join(root, archivedNoticePath), "utf8");
+    assert.match(content, /archived: true/);
+  }
+});
+
 test("manifest has required PWA fields", async () => {
   const manifest = JSON.parse(
     await readFile(path.join(root, "public/manifest.webmanifest"), "utf8"),
@@ -114,10 +137,14 @@ test("bookshop public name is お寺本や", async () => {
   const publicNameFiles = [
     "src/pages/index.astro",
     "src/pages/bookshop.astro",
+    "src/pages/bookshop/[catalog].astro",
+    "src/components/BookshopCatalogPage.astro",
     "src/components/SiteFooter.astro",
     "src/content/events/2026-08-08-bon-houza.md",
+    "src/content/events/2026-10-17-autumn-houza.md",
     "src/content/notices/2026-06-25-bon-houza-speakers.md",
     "src/content/notices/2026-07-19-bon-houza-bookshop.md",
+    "src/content/notices/2026-08-28-autumn-houza-bookshop.md",
   ];
   const obsoleteNames = ["法座" + "の本屋", "お寺" + "本屋"];
 
@@ -129,11 +156,42 @@ test("bookshop public name is お寺本や", async () => {
   }
 
   const bookshopPage = await readFile(
-    path.join(root, "src/pages/bookshop.astro"),
+    path.join(root, "src/components/BookshopCatalogPage.astro"),
     "utf8",
   );
   assert.match(bookshopPage, /title="お寺本や"/);
   assert.match(bookshopPage, />お寺本や<\/h1>/);
+});
+
+test("bookshop keeps autumn current and bon catalog history", async () => {
+  const data = await readFile(path.join(root, "src/data/bookshop.ts"), "utf8");
+  const bonNotice = await readFile(
+    path.join(root, "src/content/notices/2026-07-19-bon-houza-bookshop.md"),
+    "utf8",
+  );
+  const autumnNotice = await readFile(
+    path.join(root, "src/content/notices/2026-08-28-autumn-houza-bookshop.md"),
+    "utf8",
+  );
+
+  assert.match(data, /id: "2026-autumn-houza"[\s\S]+id: "2026-bon-houza"/);
+  assert.match(
+    data,
+    /id: "2026-autumn-houza",\s+status: "current"[\s\S]+id: "2026-bon-houza",\s+status: "ended"/,
+  );
+  assert.match(
+    await readFile(
+      path.join(root, "src/components/BookshopCatalogPage.astro"),
+      "utf8",
+    ),
+    /item\.status === "ended" \? "（終了）" : ""/,
+  );
+  assert.match(data, /id: "bukkyo-hyakunin-isshu"/);
+  assert.match(data, /id: "okaasan-okawari-arimasenka"/);
+  assert.match(data, /id: "shiroki-renge-no-hiraku-toki"/);
+  assert.match(bonNotice, /bookshop\/2026-bon-houza\//);
+  assert.match(autumnNotice, /21種類・37冊/);
+  assert.match(autumnNotice, /bookshop\/2026-autumn-houza\//);
 });
 
 test("notification send parser requires explicit apply for sending", () => {

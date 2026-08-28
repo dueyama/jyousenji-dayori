@@ -30,6 +30,7 @@ const notices = defineCollection({
       category: z.string().trim().min(1),
       heroImage: image().nullable().optional(),
       heroAlt: nullableImageAlt,
+      archived: z.boolean(),
       draft: z.boolean(),
     }),
 });

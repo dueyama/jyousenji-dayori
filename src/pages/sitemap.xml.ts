@@ -1,6 +1,7 @@
 import { getCollection } from "astro:content";
 import type { APIRoute } from "astro";
 import { absoluteSiteUrl } from "../lib/urls";
+import { bookshopCatalogs } from "../data/bookshop";
 
 function escapeXml(value: string): string {
   return value
@@ -24,6 +25,7 @@ export const GET: APIRoute = async ({ site }) => {
   const events = await getCollection("events", ({ data }) => !data.draft);
   const paths = [
     ...staticPaths,
+    ...bookshopCatalogs.map((catalog) => `/bookshop/${catalog.id}/`),
     ...notices.map((entry) => `/notices/${entry.id}/`),
     ...events.map((entry) => `/events/${entry.id}/`),
   ];

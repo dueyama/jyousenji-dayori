@@ -7,6 +7,7 @@ updatedAt: null
 category: "法要"
 heroImage: null
 heroAlt: null
+archived: false
 draft: true
 ---
 

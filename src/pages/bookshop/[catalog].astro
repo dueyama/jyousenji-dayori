@@ -1,0 +1,22 @@
+---
+import BookshopCatalogPage from "../../components/BookshopCatalogPage.astro";
+import { bookshopCatalogs, type BookshopCatalog } from "../../data/bookshop";
+
+export function getStaticPaths() {
+  return bookshopCatalogs.map((catalog) => ({
+    params: { catalog: catalog.id },
+    props: { catalog },
+  }));
+}
+
+interface Props {
+  catalog: BookshopCatalog;
+}
+
+const { catalog } = Astro.props;
+---
+
+<BookshopCatalogPage
+  catalog={catalog}
+  canonicalPath={`/bookshop/${catalog.id}/`}
+/>

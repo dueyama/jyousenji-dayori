@@ -95,6 +95,11 @@ for (const entry of entries) {
   if (entry.collection === "notices") {
     requireString(entry, "category");
     validateDate(entry, "publishedAt");
+    if (entry.data.archived !== true && entry.data.archived !== false) {
+      fail(
+        `${entry.collection}/${entry.slug}: archived は true または false にしてください`,
+      );
+    }
     if (entry.data.updatedAt !== null) {
       validateDate(entry, "updatedAt");
     }

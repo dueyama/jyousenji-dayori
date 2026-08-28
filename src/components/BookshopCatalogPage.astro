@@ -1,0 +1,219 @@
+---
+import { Image } from "astro:assets";
+import bookshopHero from "../assets/site/bookshop-hero.jpg";
+import {
+  bookshopCatalogs,
+  getBookshopCatalogBooks,
+  getBookshopStockTotal,
+  specialSalePriceYen,
+  type BookshopCatalog,
+} from "../data/bookshop";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { formatDate, formatDateTime } from "../lib/dates";
+import { withBasePath } from "../lib/urls";
+import Icon from "./Icon.astro";
+
+interface Props {
+  catalog: BookshopCatalog;
+  canonicalPath: string;
+}
+
+const { catalog, canonicalPath } = Astro.props;
+const books = getBookshopCatalogBooks(catalog);
+const stockTotal = getBookshopStockTotal(catalog);
+const yen = new Intl.NumberFormat("ja-JP");
+const eventUrl = withBasePath(`/events/${catalog.eventId}/`);
+const catalogPath = (item: BookshopCatalog) =>
+  withBasePath(`/bookshop/${item.id}/`);
+---
+
+<BaseLayout
+  title="お寺本や"
+  description={`${catalog.eventTitle}のお寺本やで販売する本をご案内します。`}
+  canonicalPath={canonicalPath}
+>
+  <section class="bookshop-hero" aria-labelledby="bookshop-title">
+    <Image
+      class="bookshop-hero__image"
+      src={bookshopHero}
+      alt="寺院の室内に並べられた本"
+      widths={[640, 960, 1400]}
+      sizes="100vw"
+      loading="eager"
+      decoding="async"
+    />
+    <div class="bookshop-hero__copy">
+      <p class="bookshop-eyebrow">本との出あいを、法座のひとときに</p>
+      <h1 id="bookshop-title">お寺本や</h1>
+      <p>
+        法座の日に、本堂で小さな本屋を開きます。仏教の本、絵本、漫画など、手に取ってゆっくりご覧ください。
+      </p>
+    </div>
+  </section>
+
+  <section class="bookshop-next-event" aria-labelledby="bookshop-next-title">
+    <div>
+      <p class="bookshop-eyebrow">{catalog.eventSectionLabel}</p>
+      <h2 id="bookshop-next-title">{catalog.eventHeading}</h2>
+      <p>
+        <time datetime={catalog.eventStartAt}
+          >{formatDateTime(catalog.eventStartAt)}</time
+        >から
+      </p>
+    </div>
+    <a class="button" href={eventUrl}>
+      {catalog.eventButtonLabel}
+      <Icon name="calendar" />
+    </a>
+  </section>
+
+  <section class="bookshop-price-note" aria-labelledby="special-price-title">
+    <span class="bookshop-price-note__mark" aria-hidden="true">¥</span>
+    <div>
+      <p class="bookshop-eyebrow">お寺本や 特別販売価格</p>
+      <h2 id="special-price-title">
+        税込価格から、10円・1円の位を切り下げます
+      </h2>
+      <p>
+        販売価格は100円単位です。たとえば税込1,984円の本は、特別販売価格1,900円になります。
+      </p>
+    </div>
+  </section>
+
+  <section class="bookshop-catalog" aria-labelledby="bookshop-catalog-title">
+    <div class="bookshop-catalog__heading">
+      <div>
+        <p class="bookshop-eyebrow">今回並ぶ本</p>
+        <h2 id="bookshop-catalog-title">
+          全{books.length}種類・{stockTotal}冊
+        </h2>
+      </div>
+      <p>
+        在庫更新: <time datetime={catalog.updatedAt}
+          >{formatDate(catalog.updatedAt)}</time
+        >
+      </p>
+    </div>
+
+    <div class="bookshop-table-wrap">
+      <table class="bookshop-table">
+        <caption>{catalog.caption}</caption>
+        <colgroup>
+          <col class="bookshop-table__genre" />
+          <col class="bookshop-table__book" />
+          <col class="bookshop-table__publisher" />
+          <col class="bookshop-table__price" />
+          <col class="bookshop-table__stock" />
+          <col class="bookshop-table__summary" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col">種類</th>
+            <th scope="col">本・著者</th>
+            <th scope="col">出版社</th>
+            <th scope="col">特別販売価格</th>
+            <th scope="col">在庫冊数</th>
+            <th scope="col">どんな本</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            books.map((book) => (
+              <tr id={book.id}>
+                <td data-label="種類">
+                  <span class="bookshop-genre">{book.genre}</span>
+                </td>
+                <td class="bookshop-book-cell" data-label="本・著者">
+                  <div class="bookshop-book">
+                    {book.coverImage ? (
+                      <span class="bookshop-cover" aria-hidden="true">
+                        <Image
+                          src={book.coverImage}
+                          alt=""
+                          widths={[72, 108]}
+                          sizes="(max-width: 720px) 64px, 60px"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </span>
+                    ) : (
+                      <span class="bookshop-cover bookshop-cover--placeholder">
+                        表紙画像
+                        <br />
+                        準備中
+                      </span>
+                    )}
+                    <span class="bookshop-book__details">
+                      {book.newArrival && (
+                        <span class="bookshop-new-label">新しく入りました</span>
+                      )}
+                      {book.productUrl ? (
+                        <a
+                          href={book.productUrl}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          <strong>{book.title}</strong>
+                          <Icon name="external" />
+                        </a>
+                      ) : (
+                        <strong>{book.title}</strong>
+                      )}
+                      <small>{book.authors}</small>
+                    </span>
+                  </div>
+                </td>
+                <td data-label="出版社">
+                  <span>{book.publisher}</span>
+                </td>
+                <td class="bookshop-price" data-label="特別販売価格">
+                  <strong>
+                    {yen.format(specialSalePriceYen(book.regularPriceYen))}円
+                  </strong>
+                  <small>税込価格 {yen.format(book.regularPriceYen)}円</small>
+                </td>
+                <td class="bookshop-stock" data-label="在庫冊数">
+                  <strong>{book.stock}冊</strong>
+                </td>
+                <td data-label="どんな本">
+                  <span>{book.summary}</span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p class="bookshop-stock-note">
+      在庫冊数は{
+        formatDate(catalog.updatedAt)
+      }時点です。本の数には限りがあり、当日の状況により変更になる場合があります。
+      表紙画像と書誌情報は、確認できた各書籍の商品案内を参照しています。
+    </p>
+  </section>
+
+  <nav class="bookshop-archive" aria-labelledby="bookshop-archive-title">
+    <div>
+      <p class="bookshop-eyebrow">これまでの記録</p>
+      <h2 id="bookshop-archive-title">法座ごとの本の一覧</h2>
+    </div>
+    <ul>
+      {
+        bookshopCatalogs.map((item) => (
+          <li>
+            <a
+              href={catalogPath(item)}
+              aria-current={item.id === catalog.id ? "page" : undefined}
+            >
+              <span>{`${item.eventTitle}${item.status === "ended" ? "（終了）" : ""}`}</span>
+              <time datetime={item.eventStartAt}>
+                {formatDate(item.eventStartAt)}
+              </time>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</BaseLayout>

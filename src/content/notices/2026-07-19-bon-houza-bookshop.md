@@ -7,6 +7,7 @@ updatedAt: null
 category: "お寺本や"
 heroImage: "../../assets/site/bookshop-hero.jpg"
 heroAlt: "寺院の室内に並べられた本"
+archived: true
 draft: false
 ---
 
@@ -16,6 +17,6 @@ draft: false
 
 販売価格は、税込価格から10円・1円の位を切り下げた100円単位の特別販売価格です。たとえば税込1,984円の本は1,900円で販売します。
 
-[販売予定の本と在庫冊数を見る](../../bookshop/)
+[盆法座で用意した本と在庫冊数を見る](../../bookshop/2026-bon-houza/)
 
 [盆法座の行事予定を見る](../../events/2026-08-08-bon-houza/)

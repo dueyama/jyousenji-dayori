@@ -18,7 +18,7 @@ OneSignal Web Push（購読管理・明示指示時のみ通知配信）
 
 `src/content.config.ts` でお知らせと行事のContent Collectionsを定義します。Markdown frontmatter の日時は日本標準時 `+09:00` を必須にしています。
 
-公開一覧、RSS、サイトマップ、詳細ページは `draft: false` の記事だけを対象にします。
+公開一覧、RSS、サイトマップ、詳細ページは `draft: false` の記事だけを対象にします。お知らせの `archived: true` はホームの最新一覧から除外し、お知らせ一覧の過去ログへ表示します。
 
 ## URLとbase path
 

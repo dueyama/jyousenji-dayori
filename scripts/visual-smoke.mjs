@@ -20,6 +20,33 @@ try {
     fullPage: true,
   });
   await assertPageState(page, "desktop home");
+  await assertTextCount(
+    page,
+    "desktop home current notice",
+    "秋法座で「お寺本や」を開きます",
+    1,
+  );
+  await assertTextCount(
+    page,
+    "desktop home archived notice",
+    "盆法座で「お寺本や」を開きます",
+    0,
+  );
+
+  await page.goto(`${baseUrl}/notices/`, { waitUntil: "networkidle" });
+  await page.screenshot({
+    path: path.join(screenshotDir, "notices-desktop.png"),
+    fullPage: true,
+  });
+  await assertPageState(page, "desktop notices");
+  await assertTextCount(page, "notices current heading", "現在のお知らせ", 1);
+  await assertTextCount(page, "notices archive heading", "過去のお知らせ", 1);
+  await assertTextCount(
+    page,
+    "notices archived bon notice",
+    "盆法座で「お寺本や」を開きます",
+    1,
+  );
 
   for (const width of [390, 375, 320]) {
     await page.setViewportSize({ width, height: width === 320 ? 700 : 844 });
@@ -90,7 +117,20 @@ try {
     path: path.join(screenshotDir, "bookshop-desktop.png"),
     fullPage: true,
   });
-  await assertBookshopState(page, "bookshop desktop");
+  await assertBookshopState(page, "bookshop desktop", {
+    rows: 21,
+    covers: 20,
+    placeholders: 1,
+    newLabels: 3,
+    stockTotal: 37,
+  });
+  await assertTextCount(page, "bookshop desktop current title", "秋法座", 1);
+  await assertTextCount(
+    page,
+    "bookshop desktop ended title",
+    "盆法座（終了）",
+    1,
+  );
 
   for (const width of [390, 320]) {
     await page.setViewportSize({ width, height: width === 320 ? 700 : 844 });
@@ -99,8 +139,36 @@ try {
       path: path.join(screenshotDir, `bookshop-mobile-${width}.png`),
       fullPage: true,
     });
-    await assertBookshopState(page, `bookshop mobile ${width}`);
+    await assertBookshopState(page, `bookshop mobile ${width}`, {
+      rows: 21,
+      covers: 20,
+      placeholders: 1,
+      newLabels: 3,
+      stockTotal: 37,
+    });
   }
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseUrl}/bookshop/2026-bon-houza/`, {
+    waitUntil: "networkidle",
+  });
+  await page.screenshot({
+    path: path.join(screenshotDir, "bookshop-bon-archive-desktop.png"),
+    fullPage: true,
+  });
+  await assertBookshopState(page, "bookshop bon archive desktop", {
+    rows: 18,
+    covers: 18,
+    placeholders: 0,
+    newLabels: 3,
+    stockTotal: 31,
+  });
+  await assertTextCount(
+    page,
+    "bookshop bon archive ended title",
+    "盆法座（終了）",
+    1,
+  );
 
   await page.setViewportSize({ width: 320, height: 700 });
   await page.goto(`${baseUrl}/notifications/`, { waitUntil: "networkidle" });
@@ -212,6 +280,13 @@ if (failures.length > 0) {
 
 console.log(`Visual smoke passed. Screenshots: ${screenshotDir}`);
 
+async function assertTextCount(page, label, text, expectedCount) {
+  const count = await page.getByText(text, { exact: true }).count();
+  if (count !== expectedCount) {
+    failures.push(`${label}: expected ${expectedCount}, found ${count}`);
+  }
+}
+
 async function assertPageState(page, label) {
   const state = await page.evaluate(() => {
     const bottomNav = document.querySelector(".bottom-nav");
@@ -268,7 +343,7 @@ async function assertPageState(page, label) {
   }
 }
 
-async function assertBookshopState(page, label) {
+async function assertBookshopState(page, label, expected) {
   await assertPageState(page, label);
   const coverImages = page.locator(".bookshop-cover img");
   const coverCount = await coverImages.count();
@@ -283,6 +358,8 @@ async function assertBookshopState(page, label) {
     return {
       rows: document.querySelectorAll(".bookshop-table tbody tr").length,
       covers: covers.length,
+      placeholders: document.querySelectorAll(".bookshop-cover--placeholder")
+        .length,
       coversLoaded: covers.every(
         (cover) => cover instanceof HTMLImageElement && cover.naturalWidth > 0,
       ),
@@ -306,23 +383,32 @@ async function assertBookshopState(page, label) {
     };
   });
 
-  if (state.rows !== 18) {
-    failures.push(`${label}: expected 18 books, found ${state.rows}`);
+  if (state.rows !== expected.rows) {
+    failures.push(
+      `${label}: expected ${expected.rows} books, found ${state.rows}`,
+    );
   }
-  if (state.covers !== 18) {
-    failures.push(`${label}: expected 18 cover images, found ${state.covers}`);
+  if (state.covers !== expected.covers) {
+    failures.push(
+      `${label}: expected ${expected.covers} cover images, found ${state.covers}`,
+    );
+  }
+  if (state.placeholders !== expected.placeholders) {
+    failures.push(
+      `${label}: expected ${expected.placeholders} cover placeholders, found ${state.placeholders}`,
+    );
   }
   if (!state.coversLoaded) {
     failures.push(`${label}: one or more cover images did not load`);
   }
-  if (state.newLabels !== 3) {
+  if (state.newLabels !== expected.newLabels) {
     failures.push(
-      `${label}: expected 3 new-arrival labels, found ${state.newLabels}`,
+      `${label}: expected ${expected.newLabels} new-arrival labels, found ${state.newLabels}`,
     );
   }
-  if (state.stockTotal !== 31) {
+  if (state.stockTotal !== expected.stockTotal) {
     failures.push(
-      `${label}: expected stock total 31, found ${state.stockTotal}`,
+      `${label}: expected stock total ${expected.stockTotal}, found ${state.stockTotal}`,
     );
   }
   if (!state.hasSpecialPriceExample) {

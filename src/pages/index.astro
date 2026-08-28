@@ -9,7 +9,7 @@ import { isFutureOrToday, sortByNewest, sortEventsByStart } from "../lib/dates";
 import { withBasePath } from "../lib/urls";
 
 const notices = sortByNewest(
-  await getCollection("notices", ({ data }) => !data.draft),
+  await getCollection("notices", ({ data }) => !data.draft && !data.archived),
 ).slice(0, 4);
 const events = sortEventsByStart(
   (await getCollection("events", ({ data }) => !data.draft)).filter((event) =>
