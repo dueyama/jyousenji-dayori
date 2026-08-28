@@ -206,6 +206,32 @@ test("bookshop keeps autumn current and bon catalog history", async () => {
   assert.match(autumnNotice, /bookshop\/2026-autumn-houza\//);
 });
 
+test("bookshop shows cumulative sales only on the current fourth catalog", async () => {
+  const data = await readFile(path.join(root, "src/data/bookshop.ts"), "utf8");
+  const page = await readFile(
+    path.join(root, "src/components/BookshopCatalogPage.astro"),
+    "utf8",
+  );
+  const currentCatalog = data.match(
+    /id: "2026-autumn-houza"([\s\S]+?)\n  },\n  {\n    id: "2026-bon-houza"/,
+  )?.[1];
+
+  assert.ok(currentCatalog);
+  assert.match(currentCatalog, /eventNumber: 4/);
+  assert.match(currentCatalog, /cumulativeSoldTotal: 29/);
+  assert.match(currentCatalog, /"shinran-shonin-no-shogai": 3/);
+  assert.match(currentCatalog, /"jigoku-to-gokuraku": 3/);
+  assert.match(
+    data,
+    /cumulativeSold: catalog\.cumulativeSoldById\?\.\[book\.id\] \?\? 0/,
+  );
+  assert.match(page, /今回で{catalog\.eventNumber}回目/);
+  assert.match(page, /cumulativeSoldTotal/);
+  assert.match(page, /冊ご購入いただきました！/);
+  assert.match(page, /丸数字は、これまでにご購入いただいた冊数です。/);
+  assert.match(page, /class="bookshop-sold-badge"/);
+});
+
 test("bookshop notices use a distinct open-book icon", async () => {
   const noticeList = await readFile(
     path.join(root, "src/components/NoticeList.astro"),

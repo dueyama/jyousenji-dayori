@@ -44,6 +44,9 @@ export interface BookshopCatalog {
   updatedAt: string;
   caption: string;
   stockById: Record<string, number>;
+  eventNumber?: number;
+  cumulativeSoldTotal?: number;
+  cumulativeSoldById?: Record<string, number>;
   newArrivalIds: string[];
 }
 
@@ -316,6 +319,26 @@ export const bookshopCatalogs: BookshopCatalog[] = [
       "okaasan-okawari-arimasenka": 2,
       "shiroki-renge-no-hiraku-toki": 2,
     },
+    eventNumber: 4,
+    cumulativeSoldTotal: 29,
+    // 2026年3月の永代経、5月の降誕会、8月の盆法座の販売記録累計。
+    cumulativeSoldById: {
+      "shinran-shonin-no-shogai": 3,
+      "emonogatari-shoshinge": 3,
+      "emonogatari-shoshinge-2": 2,
+      "manga-shoshinge-jo": 3,
+      "manga-shoshinge-ge": 1,
+      "shoshin-nembutsu-monogatari": 2,
+      "monto-monoshiricho-jo": 2,
+      "monto-monoshiricho-ge": 1,
+      "shinran-ga-michibiku-tannisho": 2,
+      "yankee-to-jushoku": 1,
+      "jigoku-to-gokuraku": 3,
+      "umi-no-shogakko": 1,
+      "heiwa-to-senso": 1,
+      "ojiichan-no-gokuraku-gokuraku": 2,
+      "akirameru-yuki": 1,
+    },
     newArrivalIds: [
       "bukkyo-hyakunin-isshu",
       "okaasan-okawari-arimasenka",
@@ -371,6 +394,7 @@ export function getBookshopCatalogBooks(catalog: BookshopCatalog) {
       ...book,
       newArrival: newArrivalIds.has(book.id),
       stock: catalog.stockById[book.id],
+      cumulativeSold: catalog.cumulativeSoldById?.[book.id] ?? 0,
     }));
 }
 

@@ -125,6 +125,13 @@ try {
     stockTotal: 37,
   });
   await assertTextCount(page, "bookshop desktop current title", "秋法座", 1);
+  await assertTextCount(page, "bookshop current event count", "今回で4回目", 1);
+  await assertTextCount(
+    page,
+    "bookshop cumulative sales",
+    "これまでに29冊ご購入いただきました！",
+    1,
+  );
   await assertTextCount(
     page,
     "bookshop desktop ended title",
@@ -168,6 +175,12 @@ try {
     "bookshop bon archive ended title",
     "盆法座（終了）",
     1,
+  );
+  await assertTextCount(
+    page,
+    "bookshop bon archive cumulative sales",
+    "冊ご購入いただきました！",
+    0,
   );
 
   await page.setViewportSize({ width: 320, height: 700 });

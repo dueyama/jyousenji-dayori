@@ -21,6 +21,7 @@ interface Props {
 const { catalog, canonicalPath } = Astro.props;
 const books = getBookshopCatalogBooks(catalog);
 const stockTotal = getBookshopStockTotal(catalog);
+const cumulativeSoldTotal = catalog.cumulativeSoldTotal ?? 0;
 const yen = new Intl.NumberFormat("ja-JP");
 const eventUrl = withBasePath(`/events/${catalog.eventId}/`);
 const catalogPath = (item: BookshopCatalog) =>
@@ -95,6 +96,23 @@ const catalogPath = (item: BookshopCatalog) =>
       </p>
     </div>
 
+    {
+      catalog.eventNumber && cumulativeSoldTotal > 0 && (
+        <p class="bookshop-sales-summary">
+          <strong>今回で{catalog.eventNumber}回目</strong>
+          <span class="bookshop-sales-summary__count">
+            これまでに{cumulativeSoldTotal}冊ご購入いただきました！
+          </span>
+          <span class="bookshop-sales-summary__legend">
+            <span class="bookshop-sold-badge" aria-hidden="true">
+              3
+            </span>
+            <span>丸数字は、これまでにご購入いただいた冊数です。</span>
+          </span>
+        </p>
+      )
+    }
+
     <div class="bookshop-table-wrap">
       <table class="bookshop-table">
         <caption>{catalog.caption}</caption>
@@ -120,8 +138,19 @@ const catalogPath = (item: BookshopCatalog) =>
           {
             books.map((book) => (
               <tr id={book.id}>
-                <td data-label="種類">
-                  <span class="bookshop-genre">{book.genre}</span>
+                <td class="bookshop-genre-cell" data-label="種類">
+                  <span class="bookshop-genre-details">
+                    <span class="bookshop-genre">{book.genre}</span>
+                    {book.cumulativeSold > 0 && (
+                      <span
+                        class="bookshop-sold-badge"
+                        aria-label={`これまでに${book.cumulativeSold}冊ご購入いただきました`}
+                        title={`これまでに${book.cumulativeSold}冊ご購入いただきました`}
+                      >
+                        {book.cumulativeSold}
+                      </span>
+                    )}
+                  </span>
                 </td>
                 <td class="bookshop-book-cell" data-label="本・著者">
                   <div class="bookshop-book">
