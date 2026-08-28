@@ -7,7 +7,7 @@ export const siteConfig = {
   description:
     "浄泉寺からのお知らせと行事予定をスマートフォンで読みやすく届ける公式PWAです。",
   googleSitesUrl:
-    import.meta.env.PUBLIC_GOOGLE_SITES_URL ?? `${googleSitesBaseUrl}/Home`,
+    import.meta.env.PUBLIC_GOOGLE_SITES_URL || `${googleSitesBaseUrl}/Home`,
   googleSitesAccessUrl: `${googleSitesBaseUrl}/access`,
   historyUrl: `${googleSitesBaseUrl}/history`,
   songVideoUrl: "https://youtu.be/gu21CPj7Mdg",

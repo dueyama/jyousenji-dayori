@@ -61,6 +61,18 @@ test("archived notices leave the home page and remain in the notice log", async 
   }
 });
 
+test("official site link falls back when the public environment value is empty", async () => {
+  const siteConfig = await readFile(
+    path.join(root, "src/config/site.ts"),
+    "utf8",
+  );
+
+  assert.match(
+    siteConfig,
+    /PUBLIC_GOOGLE_SITES_URL \|\| `\$\{googleSitesBaseUrl\}\/Home`/,
+  );
+});
+
 test("manifest has required PWA fields", async () => {
   const manifest = JSON.parse(
     await readFile(path.join(root, "public/manifest.webmanifest"), "utf8"),
