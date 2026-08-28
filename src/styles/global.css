@@ -453,6 +453,11 @@ main {
   color: var(--color-primary);
 }
 
+.entry-row__icon--bookshop {
+  background: linear-gradient(180deg, #fbf3dd, #f3e5c4);
+  color: var(--color-burgundy);
+}
+
 .entry-row__body {
   min-width: 0;
   display: grid;

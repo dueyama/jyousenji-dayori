@@ -206,6 +206,23 @@ test("bookshop keeps autumn current and bon catalog history", async () => {
   assert.match(autumnNotice, /bookshop\/2026-autumn-houza\//);
 });
 
+test("bookshop notices use a distinct open-book icon", async () => {
+  const noticeList = await readFile(
+    path.join(root, "src/components/NoticeList.astro"),
+    "utf8",
+  );
+  const icon = await readFile(
+    path.join(root, "src/components/Icon.astro"),
+    "utf8",
+  );
+
+  assert.match(
+    noticeList,
+    /notice\.data\.category === "お寺本や"[\s\S]+\? "book-open"/,
+  );
+  assert.match(icon, /"book-open"/);
+});
+
 test("notification send parser requires explicit apply for sending", () => {
   assert.deepEqual(
     parseNotificationSendArgs(["2026-06-25-bon-houza-speakers"]),
