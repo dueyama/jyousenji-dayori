@@ -23,7 +23,7 @@ try {
   await assertTextCount(
     page,
     "desktop home current notice",
-    "秋法座で「お寺本や」を開きます",
+    "秋法座のご講師が決まりました",
     1,
   );
   await assertTextCount(

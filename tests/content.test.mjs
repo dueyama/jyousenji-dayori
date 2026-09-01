@@ -132,16 +132,31 @@ test("notification send builds OneSignal push payload", () => {
 });
 
 test("houza speaker names use the temple honorific 師", async () => {
-  const contentPaths = [
-    "src/content/events/2026-08-08-bon-houza.md",
-    "src/content/notices/2026-06-25-bon-houza-speakers.md",
+  const contentChecks = [
+    {
+      paths: [
+        "src/content/events/2026-08-08-bon-houza.md",
+        "src/content/notices/2026-06-25-bon-houza-speakers.md",
+      ],
+      names: ["木村智教", "原田英真"],
+    },
+    {
+      paths: [
+        "src/content/events/2026-10-17-autumn-houza.md",
+        "src/content/notices/2026-09-01-autumn-houza-speakers.md",
+      ],
+      names: ["金安一樹", "石田敬信"],
+    },
   ];
 
-  for (const contentPath of contentPaths) {
-    const content = await readFile(path.join(root, contentPath), "utf8");
-    assert.match(content, /木村智教 師/);
-    assert.match(content, /原田英真 師/);
-    assert.doesNotMatch(content, /(?:木村智教|原田英真)\s*氏/);
+  for (const check of contentChecks) {
+    for (const contentPath of check.paths) {
+      const content = await readFile(path.join(root, contentPath), "utf8");
+      for (const name of check.names) {
+        assert.equal(content.includes(`${name} 師`), true);
+        assert.equal(content.includes(`${name} 氏`), false);
+      }
+    }
   }
 });
 
@@ -157,6 +172,7 @@ test("bookshop public name is お寺本や", async () => {
     "src/content/notices/2026-06-25-bon-houza-speakers.md",
     "src/content/notices/2026-07-19-bon-houza-bookshop.md",
     "src/content/notices/2026-08-28-autumn-houza-bookshop.md",
+    "src/content/notices/2026-09-01-autumn-houza-speakers.md",
   ];
   const obsoleteNames = ["法座" + "の本屋", "お寺" + "本屋"];
 
