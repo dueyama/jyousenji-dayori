@@ -2,8 +2,8 @@
 id: "2026-11-27-saizu-buppu-houonkou"
 title: "西津仏婦報恩講"
 summary: "午後1時30分から西津仏婦報恩講を行います。詳細は決まり次第お知らせします。"
-startAt: "2026-11-27T13:30:00+09:00"
-endAt: "2026-11-27T15:30:00+09:00"
+startAt: "2026-11-28T13:30:00+09:00"
+endAt: "2026-11-28T15:30:00+09:00"
 allDay: false
 location: "浄泉寺"
 status: "scheduled"

@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import test from "node:test";
+import { readMarkdownEntry } from "../scripts/content-utils.mjs";
 import {
   buildGoogleCalendarEvent,
   diffCalendarEvent,
@@ -23,6 +24,36 @@ test("content validation passes", () => {
     env: { ...process.env, SKIP_DIST_CHECK: "1" },
   });
   assert.equal(result.status, 0, result.stderr || result.stdout);
+});
+
+test("buppu houonkou moves to November 28 without changing its published ID", async () => {
+  const entry = await readMarkdownEntry(
+    path.join(root, "src/content/events/2026-11-27-saizu-buppu-houonkou.md"),
+    "events",
+    root,
+  );
+
+  assert.equal(entry.data.id, "2026-11-27-saizu-buppu-houonkou");
+  assert.equal(entry.slug, entry.data.id);
+  assert.equal(entry.data.startAt, "2026-11-28T13:30:00+09:00");
+  assert.equal(entry.data.endAt, "2026-11-28T15:30:00+09:00");
+  assert.equal(entry.data.allDay, false);
+  assert.equal(entry.data.draft, false);
+  assert.equal(
+    new Intl.DateTimeFormat("ja-JP", {
+      weekday: "long",
+      timeZone: "Asia/Tokyo",
+    }).format(new Date(entry.data.startAt)),
+    "土曜日",
+  );
+
+  const calendarEvent = buildGoogleCalendarEvent(entry);
+  assert.equal(calendarEvent.start.dateTime, entry.data.startAt);
+  assert.equal(calendarEvent.end.dateTime, entry.data.endAt);
+  assert.equal(
+    calendarEvent.extendedProperties.shared.contentId,
+    entry.data.id,
+  );
 });
 
 test("notification preview rejects draft entries", () => {
