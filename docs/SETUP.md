@@ -2,7 +2,7 @@
 
 ## 前提
 
-- Node.js 22以上
+- Node.js 22.12.0以上（GitHub ActionsはNode.js 24）
 - npm
 - GitHub Pages の公開元は GitHub Actions
 

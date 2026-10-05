@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
@@ -26,14 +26,14 @@
     "notification:send": "node scripts/notification-send.mjs"
   },
   "dependencies": {
-    "astro": "^6.4.8"
+    "astro": "^7.3.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "playwright": "^1.61.0",
     "prettier": "^3.8.4",
     "prettier-plugin-astro": "^0.14.1",
-    "sharp": "^0.35.2",
+    "sharp": "^0.35.5",
     "typescript": "^6.0.3"
   },
   "overrides": {
