@@ -1,0 +1,376 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { withBasePath } from "../../lib/urls";
+
+const sources = {
+  faq: "https://www.hongwanji.or.jp/faq/list.html",
+  application: "https://www.hongwanji.kyoto/visit/application.html",
+  yamaguchi:
+    "https://www.yamaguchibetsuin.net/お知らせ-ご案内-お願い/法要-行事-研修会ご案内/",
+  ingo: "https://www.hongwanji.or.jp/info/reiki_int/reiki_honbun/x034RG00000328.html",
+  homyo:
+    "https://www.hongwanji.or.jp/info/reiki_int/reiki_honbun/x034RG00000432.html",
+};
+
+const sections = [
+  ["homyo", "法名とは"],
+  ["places", "受けられる場所"],
+  ["application", "お申込みの流れ"],
+  ["offering", "冥加金について"],
+  ["yamaguchi", "山口別院の開催例"],
+  ["ingo", "院号とは"],
+  ["bereavement", "亡くなられた場合"],
+];
+---
+
+<BaseLayout
+  title="法名・院号のご案内"
+  description="法名と院号の意味、帰敬式を受けられる場所、お申込みの流れをご案内します。まず浄泉寺へご相談ください。"
+  canonicalPath="/homyo-ingo/"
+>
+  <article class="content-page prose temple-guide">
+    <a class="back-link" href={withBasePath("/about/")}>浄泉寺についてに戻る</a>
+    <header class="guide-heading">
+      <h1>法名・院号のご案内</h1>
+      <p>
+        法名は、亡くなってからいただく名前と思われがちですが、本来は、生きている私たちが仏さまの教えをよりどころとして歩むためにいただく名前です。
+      </p>
+      <p class="consultation">
+        法名や院号についてお考えの方は、まず浄泉寺へご相談ください。
+      </p>
+    </header>
+
+    <nav class="guide-contents" aria-label="このページの目次">
+      <ul>
+        {
+          sections.map(([id, label]) => (
+            <li>
+              <a href={`#${id}`}>{label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <section id="homyo" aria-labelledby="homyo-title">
+      <h2 id="homyo-title">法名とは</h2>
+      <p>
+        法名（ほうみょう）は、仏さまの弟子としていただく名前です。浄土真宗本願寺派では「戒名」ではなく「法名」といい、「釋○○」という形で表します。
+      </p>
+      <p>
+        法名は、帰敬式（ききょうしき）を受けることで授与されます。帰敬式は「おかみそり」とも呼ばれ、仏さまの教えに出あったことを喜び、お念仏とともに生きていく思いを新たにする儀式です。
+      </p>
+      <p class="key-point">
+        <strong
+          >帰敬式は、生涯に一度の儀式です。すでに受けられた方は、改めて受ける必要はありません。</strong
+        >
+      </p>
+      <p class="source-links">
+        <a href={sources.faq} rel="noopener noreferrer" target="_blank"
+          >本願寺派の説明</a
+        >
+        <a href={sources.application} rel="noopener noreferrer" target="_blank"
+          >本山の案内</a
+        >
+      </p>
+    </section>
+
+    <section id="places" aria-labelledby="places-title">
+      <h2 id="places-title">どこで受けられますか</h2>
+      <p>
+        生前に法名をいただく帰敬式は、本山や各地の別院で受けることができます。
+      </p>
+      <h3>京都の本山・西本願寺</h3>
+      <p>
+        <strong>ほぼ毎日、朝と昼に行われています。</strong
+        >実施しない日や時間が変わる日もあるため、参拝前に日程を確認します。
+      </p>
+      <h3>山口別院など、各地の別院</h3>
+      <p>
+        <strong
+          >年に一回程度、報恩講などの法要にあわせて帰敬式を受けられる機会もあります。</strong
+        >開催日や回数は別院・年度によって異なります。山口別院でも、2026年は報恩講法要にあわせた開催が案内されています。
+      </p>
+      <p>京都まで出かけることが難しい方も、まずはご相談ください。</p>
+      <p class="source-links">
+        <a href={sources.application} rel="noopener noreferrer" target="_blank"
+          >本山の案内</a
+        >
+        <a href={sources.yamaguchi} rel="noopener noreferrer" target="_blank"
+          >山口別院の案内</a
+        >
+      </p>
+    </section>
+
+    <section id="application" aria-labelledby="application-title">
+      <h2 id="application-title">お申込みの流れ</h2>
+      <ol class="application-steps">
+        <li>
+          <strong>まず浄泉寺へご相談ください。</strong>
+          <p>
+            受式を希望される方のお名前や、ご希望の時期などをお聞かせください。
+          </p>
+        </li>
+        <li>
+          <strong>場所・日程と申込方法を確認します。</strong>
+          <p>
+            受式する場所に応じて、必要事項、申込期限、冥加金などをご案内します。
+          </p>
+        </li>
+        <li>
+          <strong>申込みを済ませ、ご本人が帰敬式を受けます。</strong>
+          <p>帰敬式を受け、法名をいただきます。</p>
+        </li>
+      </ol>
+      <p>
+        希望する法名がある場合は、住職と相談して事前に願い出る「内願（ないがん）」という方法があります。本山では、受式希望日の<strong
+          >2か月前までに所属寺院の住職から申請</strong
+        >する必要がありますので、早めにご相談ください。
+      </p>
+      <p class="source-links">
+        <a href={sources.application} rel="noopener noreferrer" target="_blank"
+          >本山の申込案内</a
+        >
+      </p>
+    </section>
+
+    <section id="offering" aria-labelledby="offering-title">
+      <h2 id="offering-title">冥加金について</h2>
+      <p>帰敬式を受ける際には、冥加金（みょうがきん）をお納めします。</p>
+      <p>
+        本山の通常の帰敬式は、<strong>成人12,000円、未成年6,000円</strong
+        >と案内されています。法名の内願を希望する場合は、別途10,000円以上の懇志が必要です。受ける場所や機会によって金額が異なるため、申込みの際に確認します。
+      </p>
+      <p class="source-links">
+        <a href={sources.application} rel="noopener noreferrer" target="_blank"
+          >本山の公式案内</a
+        >
+      </p>
+    </section>
+
+    <section id="yamaguchi" aria-labelledby="yamaguchi-title">
+      <h2 id="yamaguchi-title">山口別院の開催例</h2>
+      <p>2026年の帰敬式は、次のように案内されています。</p>
+      <dl class="event-details">
+        <div>
+          <dt>日程</dt><dd>
+            <time datetime="2026-11-25">2026年11月25日（水）</time>
+          </dd>
+        </div>
+        <div>
+          <dt>時間</dt><dd>
+            12時30分受付、13時20分から勤行・引き続き帰敬式。15時ごろ終了予定
+          </dd>
+        </div>
+        <div><dt>会場</dt><dd>本願寺山口別院 本堂</dd></div>
+        <div><dt>受式冥加金</dt><dd>成人15,000円、未成年9,000円</dd></div>
+        <div><dt>申込み</dt><dd>所属寺院へ申込み</dd></div>
+        <div>
+          <dt>申込締切</dt><dd>10月9日（金）。内願希望の場合は9月11日（金）</dd>
+        </div>
+      </dl>
+      <p>内願を希望する場合は、別途10,000円の内願懇志が案内されています。</p>
+      <p class="key-point">
+        <strong>この年の案内上の申込締切は過ぎています。</strong
+        >今後の開催予定や受付状況については、浄泉寺へご相談ください。
+      </p>
+      <p class="source-links">
+        <a href={sources.yamaguchi} rel="noopener noreferrer" target="_blank"
+          >山口別院の公式案内</a
+        >
+      </p>
+    </section>
+
+    <section id="ingo" aria-labelledby="ingo-title">
+      <h2 id="ingo-title">院号とは</h2>
+      <p>
+        院号（いんごう）は、法名とは別に、宗門の護持・発展への貢献などに対して宗門から授与されるものです。「○○院」という形で、法名とあわせて用います。
+      </p>
+      <p>
+        院号を希望される方も、まず浄泉寺へご相談ください。申請方法や懇志を確認し、所定の手続きを進めます。寺院が独自に院号を授けるものではありません。
+      </p>
+      <p>
+        本山では、<strong
+          >永代経懇志20万円以上をお納めいただいた方への院号授与</strong
+        >が案内されています。これは授与の取扱いの一つであり、法名をいただく帰敬式とは別のものです。
+      </p>
+      <p class="source-links">
+        <a href={sources.ingo} rel="noopener noreferrer" target="_blank"
+          >院号授与規程</a
+        >
+        <a href={sources.application} rel="noopener noreferrer" target="_blank"
+          >本山の院号案内</a
+        >
+      </p>
+    </section>
+
+    <section id="bereavement" aria-labelledby="bereavement-title">
+      <h2 id="bereavement-title">亡くなられた場合</h2>
+      <p>
+        帰敬式を受けないまま亡くなられた場合にも、法名について浄泉寺へご相談ください。すでに法名や院号がある場合は、そのお名前が分かるものをお知らせください。
+      </p>
+      <p class="source-links">
+        <a href={sources.homyo} rel="noopener noreferrer" target="_blank"
+          >法名授与の規定</a
+        >
+      </p>
+      <p class="consultation">
+        手続きがよく分からない段階でも構いません。まずは浄泉寺へお声がけください。
+      </p>
+    </section>
+
+    <footer class="guide-footer">
+      <p>
+        日程・金額は<time datetime="2026-10-25">2026年10月25日</time
+        >時点で確認した公式案内に基づいています。
+      </p>
+      <a href={withBasePath("/about/")}>浄泉寺についてに戻る</a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .temple-guide {
+    max-width: 760px;
+    margin-inline: auto;
+    font-size: 1.125rem;
+    line-height: 1.9;
+  }
+
+  .back-link,
+  .source-links a,
+  .guide-footer a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .back-link,
+  .source-links,
+  .guide-footer {
+    font-size: 1rem;
+  }
+
+  .guide-heading {
+    padding-block: 24px 8px;
+  }
+
+  h1 {
+    margin: 0 0 24px;
+    font-size: 2.5rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .consultation {
+    color: var(--color-primary-strong);
+    font-weight: 700;
+  }
+
+  .guide-contents {
+    padding-block: 16px;
+    border-block: 1px solid var(--color-border);
+  }
+
+  .guide-contents ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .guide-contents a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding-block: 4px;
+    font-size: 1rem;
+  }
+
+  section {
+    padding-block: 32px;
+    border-bottom: 1px solid var(--color-border);
+    scroll-margin-top: 100px;
+  }
+
+  h2 {
+    margin: 0 0 20px;
+    padding-left: 14px;
+    border-left: 4px solid var(--color-burgundy);
+    font-size: 1.5rem;
+    line-height: 1.5;
+  }
+
+  h3 {
+    margin: 24px 0 12px;
+    font-size: 1.2rem;
+  }
+
+  .key-point {
+    padding-left: 16px;
+    border-left: 3px solid var(--color-primary);
+  }
+
+  .source-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+    margin-bottom: 0;
+  }
+
+  .application-steps li + li {
+    margin-top: 24px;
+  }
+
+  .application-steps p {
+    margin: 8px 0 0;
+  }
+
+  .event-details {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .event-details div {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: 16px;
+    padding-block: 14px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  dt {
+    font-weight: 700;
+  }
+
+  dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .guide-footer {
+    padding-top: 24px;
+  }
+
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .guide-contents ul {
+      grid-template-columns: 1fr;
+    }
+
+    .event-details div {
+      grid-template-columns: 6rem minmax(0, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    h1 {
+      font-size: 1.75rem;
+    }
+  }
+</style>

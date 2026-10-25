@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import Icon from "../components/Icon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { siteConfig } from "../config/site";
+import { withBasePath } from "../lib/urls";
 import templePhoto from "../assets/site/jyousenji-hondo.jpg";
 import songThumbnail from "../assets/site/jyousenji-song.jpg";
 
@@ -40,6 +41,10 @@ const accessLinks = [
     <div class="page-title">
       <h1>浄泉寺について</h1>
     </div>
+
+    <p>
+      <a href={withBasePath("/homyo-ingo/")}>法名・院号のご案内</a>
+    </p>
 
     <figure class="intro-photo">
       <Image

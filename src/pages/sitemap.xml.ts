@@ -19,6 +19,7 @@ export const GET: APIRoute = async ({ site }) => {
     "/notifications/",
     "/guide/",
     "/about/",
+    "/homyo-ingo/",
     "/privacy/",
   ];
   const notices = await getCollection("notices", ({ data }) => !data.draft);
