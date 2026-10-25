@@ -60,6 +60,7 @@ test("temple practices and sutra book answers preserve the official source conte
   assert.match(books, /import \{ Image \} from "astro:assets"/);
   assert.equal((books.match(/<Image\s/g) || []).length, 2);
   assert.match(layout, /withBasePath\("\/faq\/"\)/);
+  assert.equal((layout.match(/\.faq-answer \.page-title h1/g) || []).length, 2);
   for (const route of ["/faq/buddhist-practices/", "/faq/sutra-books/"]) {
     assert.ok(sitemap.includes(`"${route}"`));
   }
