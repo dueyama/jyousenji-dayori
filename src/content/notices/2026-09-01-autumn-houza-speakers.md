@@ -7,7 +7,7 @@ updatedAt: null
 category: "法座"
 heroImage: null
 heroAlt: null
-archived: false
+archived: true
 draft: false
 ---
 

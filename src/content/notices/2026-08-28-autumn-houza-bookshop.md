@@ -7,7 +7,7 @@ updatedAt: null
 category: "お寺本や"
 heroImage: "../../assets/site/bookshop-hero.jpg"
 heroAlt: "寺院の室内に並べられた本"
-archived: false
+archived: true
 draft: false
 ---
 

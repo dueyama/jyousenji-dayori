@@ -81,6 +81,8 @@ test("archived notices leave the home page and remain in the notice log", async 
   const archivedNoticePaths = [
     "src/content/notices/2026-06-25-bon-houza-speakers.md",
     "src/content/notices/2026-07-19-bon-houza-bookshop.md",
+    "src/content/notices/2026-08-28-autumn-houza-bookshop.md",
+    "src/content/notices/2026-09-01-autumn-houza-speakers.md",
   ];
 
   assert.match(homePage, /!data\.draft && !data\.archived/);
