@@ -1,0 +1,100 @@
+---
+import FaqAnswerLayout from "../../layouts/FaqAnswerLayout.astro";
+import Icon from "../../components/Icon.astro";
+
+const videos = [
+  {
+    id: "incense",
+    title: "お焼香の作法",
+    description: "浄土真宗本願寺派のお焼香の作法を紹介する公式動画です。",
+    href: "https://www.youtube.com/watch?v=NJUDWiP8-og",
+  },
+  {
+    id: "gassho",
+    title: "合掌・礼拝の作法",
+    description: "合掌と礼拝の作法を紹介する公式動画です。",
+    href: "https://www.youtube.com/watch?v=CuHzf7442Ek",
+  },
+  {
+    id: "nenju",
+    title: "念珠について",
+    description: "浄土真宗本願寺派の念珠について紹介する公式動画です。",
+    href: "https://www.youtube.com/watch?v=rpBI1n71d50",
+  },
+];
+---
+
+<FaqAnswerLayout
+  title="仏事の作法を知りたい"
+  description="お焼香、合掌・礼拝、念珠について、本願寺派の公式動画をご案内します。"
+  canonicalPath="/faq/buddhist-practices/"
+>
+  {
+    videos.map((video) => (
+      <section id={video.id} aria-labelledby={`${video.id}-title`}>
+        <h2 id={`${video.id}-title`}>{video.title}</h2>
+        <p>{video.description}</p>
+        <a
+          class="video-link"
+          href={video.href}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <Icon name="play" />
+          <span>公式動画を見る（YouTube）</span>
+          <Icon name="external" />
+        </a>
+      </section>
+    ))
+  }
+
+  <section aria-labelledby="more-questions-title">
+    <h2 id="more-questions-title">仏事・行事について、もっと知りたい方へ</h2>
+    <p>
+      本願寺派の公式サイトに、日々のお勤めや法事・仏事についてのQ&amp;Aがまとめられています。
+    </p>
+    <p>
+      <a
+        href="https://www.hongwanji.or.jp/faq/"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        浄土真宗本願寺派の仏事・行事Q&amp;A <Icon name="external" />
+      </a>
+    </p>
+    <p>ご不明なことがありましたら、浄泉寺へご相談ください。</p>
+  </section>
+
+  <p class="source-link">
+    <a
+      href="https://sites.google.com/view/hitomarujyousenji/about/faq"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      浄泉寺公式ページ「お経本・仏事について」
+    </a>
+  </p>
+</FaqAnswerLayout>
+
+<style>
+  .video-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding-block: 6px;
+  }
+
+  .video-link span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .video-link :global(.icon) {
+    flex-shrink: 0;
+  }
+
+  .source-link {
+    margin-top: 36px;
+  }
+</style>

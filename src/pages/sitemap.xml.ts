@@ -19,6 +19,8 @@ export const GET: APIRoute = async ({ site }) => {
     "/notifications/",
     "/guide/",
     "/faq/",
+    "/faq/buddhist-practices/",
+    "/faq/sutra-books/",
     "/about/",
     "/homyo-ingo/",
     "/privacy/",

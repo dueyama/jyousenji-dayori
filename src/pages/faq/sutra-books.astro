@@ -1,0 +1,111 @@
+---
+import FaqAnswerLayout from "../../layouts/FaqAnswerLayout.astro";
+import Icon from "../../components/Icon.astro";
+import { Image } from "astro:assets";
+import nichijoCover from "../../assets/faq/nichijo-gongyo-seiten-transparent.webp";
+import butsujiCover from "../../assets/faq/butsuji-gongyo-seiten-transparent.webp";
+---
+
+<FaqAnswerLayout
+  title="お経本はどれを使えばよいですか？"
+  description="浄泉寺では、お勤めや法要に応じて2種類のお経本を用いています。"
+  canonicalPath="/faq/sutra-books/"
+>
+  <section id="nichijo" aria-labelledby="nichijo-title">
+    <h2 id="nichijo-title">浄土真宗本願寺派 日常勤行聖典</h2>
+    <div class="book-intro">
+      <Image
+        src={nichijoCover}
+        alt="浄土真宗本願寺派 日常勤行聖典の赤い表紙"
+        widths={[112, 224, 336]}
+        sizes="(min-width: 600px) 144px, 104px"
+        width={336}
+        format="webp"
+        class="book-cover"
+      />
+      <div>
+        <p class="publisher"><Icon name="book-open" /> 本願寺出版社</p>
+        <p>
+          日常のお勤め、お取越し、お盆などでは、こちらのお経本を用います。法座にもお持ちください。
+        </p>
+        <p>
+          お寺にも用意があります。お取越しなどの際には、一定数をお持ちしています。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="butsuji" aria-labelledby="butsuji-title">
+    <h2 id="butsuji-title">仏事勤行聖典</h2>
+    <div class="book-intro">
+      <Image
+        src={butsujiCover}
+        alt="仏事勤行聖典の表紙"
+        widths={[112, 224, 336]}
+        sizes="(min-width: 600px) 144px, 104px"
+        width={336}
+        format="webp"
+        class="book-cover"
+      />
+      <div>
+        <p class="publisher"><Icon name="book-open" /> 百華苑</p>
+        <p>
+          満中陰や年忌法要（一周忌、三回忌など）では、こちらのお経本を用います。法要の際には、一定数をお持ちしています。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="preparation-title">
+    <h2 id="preparation-title">お経本のご用意について</h2>
+    <p>
+      お経本を新しくご用意される場合や、どちらを使うか分からない場合は、浄泉寺へご相談ください。
+    </p>
+    <p>
+      <a
+        href="https://sites.google.com/view/hitomarujyousenji/about/faq"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        浄泉寺公式ページのお経本の案内 <Icon name="external" />
+      </a>
+    </p>
+  </section>
+</FaqAnswerLayout>
+
+<style>
+  .book-intro {
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .book-intro :global(.book-cover) {
+    display: block;
+    width: 104px;
+    height: auto;
+  }
+
+  .book-intro p:first-child {
+    margin-top: 0;
+  }
+
+  @media (min-width: 600px) {
+    .book-intro {
+      grid-template-columns: 144px minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .book-intro :global(.book-cover) {
+      width: 144px;
+    }
+  }
+
+  .publisher {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+  }
+</style>

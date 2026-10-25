@@ -54,7 +54,10 @@ test("guide preserves the approved ceremony and application distinctions", async
   assert.match(route, /成人15,000円、未成年9,000円/);
   assert.match(route, /この年の案内上の申込締切は過ぎています/);
   assert.match(route, /2026年11月25日（水）/);
-  assert.match(route, /永代経懇志20万円以上/);
+  assert.match(
+    route,
+    /本山（西本願寺）へ永代経懇志20万円以上をお納めいただいた方への院号授与/,
+  );
   assert.match(route, /寺院が独自に院号を授けるものではありません/);
 });
 

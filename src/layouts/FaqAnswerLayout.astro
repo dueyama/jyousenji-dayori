@@ -1,0 +1,74 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import { withBasePath } from "../lib/urls";
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath: string;
+}
+
+const { title, description, canonicalPath } = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+>
+  <article class="content-page prose faq-answer">
+    <a class="back-link" href={withBasePath("/faq/")}>よくあるご質問に戻る</a>
+    <header class="page-title">
+      <h1>{title}</h1>
+      <p>{description}</p>
+    </header>
+    <slot />
+    <p class="back-link">
+      <a href={withBasePath("/faq/")}>よくあるご質問に戻る</a>
+    </p>
+  </article>
+</BaseLayout>
+
+<style>
+  .faq-answer {
+    margin-inline: auto;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 28px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  header p {
+    margin: 0;
+  }
+
+  .faq-answer :global(section) {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .faq-answer :global(h2) {
+    margin: 0 0 16px;
+    font-size: 1.5rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 1.75rem;
+    }
+
+    .faq-answer :global(h2) {
+      font-size: 1.25rem;
+    }
+  }
+</style>
