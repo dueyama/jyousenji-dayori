@@ -1,10 +1,14 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import Icon from "../../components/Icon.astro";
 import { withBasePath } from "../../lib/urls";
 
 const sources = {
   faq: "https://www.hongwanji.or.jp/faq/list.html",
   application: "https://www.hongwanji.kyoto/visit/application.html",
+  ceremony: "https://www.hongwanji.kyoto/visit/application.html#d03_03",
+  ceremonyIntroduction: "https://www.youtube.com/watch?v=Rk-2H6Mwv5I",
+  ceremonyApplication: "https://www.youtube.com/watch?v=bXkBHOa7Fo0",
   yamaguchi:
     "https://www.yamaguchibetsuin.net/お知らせ-ご案内-お願い/法要-行事-研修会ご案内/",
   ingo: "https://www.hongwanji.or.jp/info/reiki_int/reiki_honbun/x034RG00000328.html",
@@ -69,7 +73,7 @@ const sections = [
         <a href={sources.faq} rel="noopener noreferrer" target="_blank"
           >本願寺派の説明</a
         >
-        <a href={sources.application} rel="noopener noreferrer" target="_blank"
+        <a href={sources.ceremony} rel="noopener noreferrer" target="_blank"
           >本山の案内</a
         >
       </p>
@@ -93,13 +97,38 @@ const sections = [
       </p>
       <p>京都まで出かけることが難しい方も、まずはご相談ください。</p>
       <p class="source-links">
-        <a href={sources.application} rel="noopener noreferrer" target="_blank"
+        <a href={sources.ceremony} rel="noopener noreferrer" target="_blank"
           >本山の案内</a
         >
         <a href={sources.yamaguchi} rel="noopener noreferrer" target="_blank"
           >山口別院の案内</a
         >
       </p>
+      <h3>西本願寺の公式動画（YouTube）</h3>
+      <ul class="video-links">
+        <li>
+          <a
+            href={sources.ceremonyIntroduction}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <Icon name="play" />
+            <span>法名の意味と帰敬式の様子（Vol.1）</span>
+            <Icon name="external" />
+          </a>
+        </li>
+        <li>
+          <a
+            href={sources.ceremonyApplication}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <Icon name="play" />
+            <span>記念品と申込みの案内（Vol.2）</span>
+            <Icon name="external" />
+          </a>
+        </li>
+      </ul>
     </section>
 
     <section id="application" aria-labelledby="application-title">
@@ -128,7 +157,7 @@ const sections = [
         >する必要がありますので、早めにご相談ください。
       </p>
       <p class="source-links">
-        <a href={sources.application} rel="noopener noreferrer" target="_blank"
+        <a href={sources.ceremony} rel="noopener noreferrer" target="_blank"
           >本山の申込案内</a
         >
       </p>
@@ -142,7 +171,7 @@ const sections = [
         >と案内されています。法名の内願を希望する場合は、別途10,000円以上の懇志が必要です。受ける場所や機会によって金額が異なるため、申込みの際に確認します。
       </p>
       <p class="source-links">
-        <a href={sources.application} rel="noopener noreferrer" target="_blank"
+        <a href={sources.ceremony} rel="noopener noreferrer" target="_blank"
           >本山の公式案内</a
         >
       </p>
@@ -322,6 +351,31 @@ const sections = [
 
   .application-steps li + li {
     margin-top: 24px;
+  }
+
+  .video-links {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .video-links a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding-block: 4px;
+  }
+
+  .video-links span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .video-links :global(.icon) {
+    flex-shrink: 0;
   }
 
   .application-steps p {
