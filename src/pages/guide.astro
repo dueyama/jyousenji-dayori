@@ -3,10 +3,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBasePath } from "../lib/urls";
 ---
 
-<BaseLayout title="利用案内" canonicalPath="/guide/">
+<BaseLayout
+  title="ホーム画面への追加方法"
+  description="iPhone・iPadとAndroidで、浄泉寺のお知らせをホーム画面に追加する手順をご案内します。"
+  canonicalPath="/guide/"
+>
   <section class="content-page">
     <div class="page-title">
-      <h1>利用案内</h1>
+      <h1>ホーム画面への追加方法</h1>
       <p>
         このサイトをスマートフォンのホーム画面に追加すると、アプリのように開けます。
       </p>
@@ -34,6 +38,9 @@ import { withBasePath } from "../lib/urls";
     <p>
       <a class="button" href={withBasePath("/notifications/")}>通知設定へ進む</a
       >
+    </p>
+    <p class="prose">
+      <a href={withBasePath("/faq/")}>よくあるご質問に戻る</a>
     </p>
   </section>
 </BaseLayout>

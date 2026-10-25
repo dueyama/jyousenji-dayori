@@ -1,0 +1,151 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBasePath } from "../lib/urls";
+
+const questions = [
+  {
+    title: "法名・院号は、どうすればいただけますか？",
+    summary: "法名・院号の意味、帰敬式を受ける場所、お申込みについて。",
+    href: "/homyo-ingo/",
+  },
+  {
+    title: "お知らせの通知を受け取るには？",
+    summary: "ホーム画面への追加と、通知の登録・確認について。",
+    href: "/notifications/",
+  },
+];
+---
+
+<BaseLayout
+  title="よくあるご質問"
+  description="法名・院号や、お知らせの通知について、よくあるご質問をご案内します。"
+  canonicalPath="/faq/"
+>
+  <section class="content-page faq-page">
+    <header class="faq-heading">
+      <p>Q&amp;A</p>
+      <h1>よくあるご質問</h1>
+    </header>
+    <nav aria-label="質問一覧">
+      <ul class="question-list">
+        {
+          questions.map((question) => (
+            <li>
+              <a class="question-link" href={withBasePath(question.href)}>
+                <span class="question-mark" aria-hidden="true">
+                  Q
+                </span>
+                <div class="question-copy">
+                  <h2>{question.title}</h2>
+                  <span>{question.summary}</span>
+                </div>
+                <span class="question-arrow" aria-hidden="true">
+                  ›
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </section>
+</BaseLayout>
+
+<style>
+  .faq-page {
+    margin-inline: auto;
+  }
+
+  .faq-heading {
+    margin-bottom: 28px;
+  }
+
+  .faq-heading p {
+    margin: 0 0 8px;
+    color: var(--color-burgundy);
+    font-weight: 700;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 2.25rem;
+    line-height: 1.4;
+  }
+
+  .question-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .question-list li {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .question-link {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 20px;
+    align-items: start;
+    gap: 16px;
+    min-height: 88px;
+    padding: 28px 12px;
+    text-decoration: none;
+  }
+
+  .question-link:hover {
+    background: var(--color-surface);
+  }
+
+  .question-link:hover h2 {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .question-mark,
+  .question-arrow {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    line-height: 1.5;
+    font-weight: 700;
+  }
+
+  .question-arrow {
+    align-self: center;
+  }
+
+  .question-copy {
+    display: grid;
+    gap: 10px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .question-copy h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .question-copy > span {
+    color: var(--color-muted);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 1.875rem;
+    }
+
+    .question-link {
+      grid-template-columns: 24px minmax(0, 1fr) 16px;
+      gap: 12px;
+      padding: 24px 0;
+    }
+
+    .question-copy h2 {
+      font-size: 1.125rem;
+    }
+  }
+</style>

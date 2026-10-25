@@ -19,7 +19,12 @@ test("homyo and ingo guide is a public static page with an entry link", async ()
     new URL("../src/pages/about.astro", import.meta.url),
     "utf8",
   );
-  assert.match(about, /withBasePath\("\/homyo-ingo\/"\)/);
+  assert.match(about, /withBasePath\("\/faq\/"\)/);
+  const faq = await readFile(
+    new URL("../src/pages/faq.astro", import.meta.url),
+    "utf8",
+  );
+  assert.match(faq, /href: "\/homyo-ingo\/"/);
   assert.doesNotMatch(
     about,
     /import\.meta\.env\.DEV|法名・院号のご案内（下書き）/,
@@ -71,7 +76,7 @@ test("guide navigation uses valid sections and official sources", async () => {
     );
     assert.ok(route.includes(`<h2 id="${id}-title">`));
   }
-  assert.match(route, /withBasePath\("\/about\/"\)/);
+  assert.match(route, /withBasePath\("\/faq\/"\)/);
   assert.match(route, /www\.hongwanji\.kyoto\/visit\/application\.html/);
   assert.match(route, /www\.yamaguchibetsuin\.net/);
   for (const link of route.matchAll(/<a\s+href=\{sources\.[^>]+>/g)) {

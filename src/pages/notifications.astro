@@ -4,14 +4,23 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBasePath } from "../lib/urls";
 ---
 
-<BaseLayout title="通知を受け取る" canonicalPath="/notifications/">
+<BaseLayout
+  title="通知設定"
+  description="浄泉寺からのお知らせの通知を登録し、現在の登録状態を確認できます。"
+  canonicalPath="/notifications/"
+>
   <section class="content-page">
     <div class="page-title">
-      <h1>通知を受け取る</h1>
+      <h1>通知設定</h1>
       <p>
         大切なお知らせや行事予定を、希望する方だけにプッシュ通知でお届けします。
       </p>
     </div>
+
+    <p class="prose notification-help">
+      はじめての方は、まずホーム画面に追加し、そのアイコンから開いてください。
+      <a href={withBasePath("/guide/")}>ホーム画面への追加方法を見る</a>
+    </p>
 
     <div class="notification-panel">
       <p
@@ -35,33 +44,8 @@ import { withBasePath } from "../lib/urls";
       </p>
     </div>
 
-    <section
-      class="section section--after-fixed-nav prose"
-      aria-labelledby="ios-title"
-    >
-      <h2 id="ios-title">iPhone／iPadの場合</h2>
-      <ol>
-        <li>Safariでこのサイトを開きます。</li>
-        <li>共有ボタンから「ホーム画面に追加」を選びます。</li>
-        <li>
-          追加したホーム画面のアイコンから開き、このページのボタンを押します。
-        </li>
-      </ol>
-    </section>
-
-    <section class="section prose" aria-labelledby="android-title">
-      <h2 id="android-title">Androidの場合</h2>
-      <ol>
-        <li>Chromeなど対応ブラウザーでこのサイトを開きます。</li>
-        <li>このページの「通知を受け取る」を押します。</li>
-        <li>必要に応じて、ブラウザーのメニューからホーム画面へ追加します。</li>
-      </ol>
-    </section>
-
-    <p>
-      <a class="button button--secondary" href={withBasePath("/guide/")}
-        >ホーム画面への追加手順を見る</a
-      >
+    <p class="prose notification-help">
+      <a href={withBasePath("/faq/")}>よくあるご質問に戻る</a>
     </p>
   </section>
 
@@ -317,3 +301,11 @@ import { withBasePath } from "../lib/urls";
     void refreshState();
   </script>
 </BaseLayout>
+
+<style>
+  .notification-help a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+</style>
